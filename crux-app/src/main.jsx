@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.css'
 import App from './App.jsx'
 import { ResultPage } from './components/ResultPage.jsx'
+import { ResultPageArea } from './components/ResultPageArea.jsx'
 
 const queryClient = new QueryClient()
 
@@ -11,6 +12,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <ResultPage />
+      <ResultPageArea />
     </QueryClientProvider>
   </StrictMode>,
 )
