@@ -162,7 +162,7 @@ export const ResultPage = () => {
                 <option value="2">BMO</option>
                 <option value="3">CRX</option>             
             </select>
-        <h1 className="result-page__title">CRX Normal 2025 - Top Rate by Grade</h1>
+        <h1 className="result-page__title"> {year} {gymId === "2" ? "BMO" : "CRX"} Result - Top Rate by Month</h1>
 
         {resultInfo.map((gradeData) => {
           const chartData = buildChartData(gradeData)
