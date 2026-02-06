@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 import axios from 'axios'
 import {
   Chart as ChartJS,
@@ -112,10 +113,18 @@ const chartOptions = (actualData) => ({
 })
 
 export const ResultPage = () => {
+
+  const [year, setYear] = useState(2025)
+  const [gymId, setGymId] = useState(3)
+
+  const [gymForm, setGymForm] = useState({
+    gyms: [2, 3]
+  });
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ['topRates', 2025, 3],
+    queryKey: ['topRates', year, gymId],
     queryFn: async () => {
-      const response = await axios.get('/api/top_rates?year=2026&gym_id=2')
+      const response = await axios.get(`/api/top_rates?year=${year}&gym_id=${gymId}`)
       return response.data
     },
   })
@@ -145,6 +154,14 @@ export const ResultPage = () => {
   return (
     <div className="result-page">
       <div className="result-page__container">
+            <select id="year" value={year} onChange={(e) => setYear(e.target.value)}>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+            </select>
+            <select id="gymId" value={gymId} onChange={(e) => setGymId(e.target.value)}>
+                <option value="2">BMO</option>
+                <option value="3">CRX</option>             
+            </select>
         <h1 className="result-page__title">CRX Normal 2025 - Top Rate by Grade</h1>
 
         {resultInfo.map((gradeData) => {
