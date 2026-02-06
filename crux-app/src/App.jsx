@@ -1,10 +1,20 @@
 import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['dataKey'],
+    queryFn: async () => {
+      const response = await axios.get('/api/top_rates?year=2025&gym_id=3');
+      return response.data;
+    }
+  });
 
   return (
     <>
