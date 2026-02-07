@@ -1,0 +1,11 @@
+services:
+  web:
+    build:
+      context: ./crux-app
+      dockerfile: Dockerfile
+    container_name: crux-frontend
+    ports:
+      - "3000:80"
+    # コンテナからホストのバックエンド（例: localhost:8000）へアクセスするため（Linux でも host.docker.internal を使えるようにする）
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
