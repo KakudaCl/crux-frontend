@@ -80,7 +80,7 @@ button:focus-visible {
 .result-page__header {
   background-color: #000;
   color: white;
-  padding: 10px 30px;
+  padding: 0px 30px;
   display: flex;
   align-items: center;
   gap: 40px;
@@ -89,8 +89,9 @@ button:focus-visible {
 }
 
 .result-page__header-logo {
-  font-size: 24px;
-  font-weight: bold;
+  font-family: 'Stick No Bills', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
   letter-spacing: 2px;
 }
 
