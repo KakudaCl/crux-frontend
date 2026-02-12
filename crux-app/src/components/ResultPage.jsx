@@ -154,17 +154,43 @@ export const ResultPage = () => {
 
   return (
     <div className="result-page">
-      <div className="result-page__container">
-            <select id="year" value={year} onChange={(e) => setYear(e.target.value)}>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-            </select>
-            <select id="gymId" value={gymId} onChange={(e) => setGymId(e.target.value)}>
-                <option value="2">BMO</option>
-                <option value="3">CRX</option>             
-            </select>
-        <h1 className="result-page__title"> {year} {gymId === "2" ? "BMO" : "CRX"} Result - Top Rate by Month</h1>
+      {/* ヘッダー */}
+      <header className="result-page__header">
+        <div className="result-page__header-logo">BOLLOG</div>
+        <nav className="result-page__header-nav">
+          <a href="#" className="result-page__nav-link result-page__nav-link--active">グレード別完登率</a>
+          <a href="#" className="result-page__nav-link">エリア別完登率</a>
+          <a href="#" className="result-page__nav-link">トライログ</a>
+        </nav>
+      </header>
 
+      <div className="result-page__container">
+        {/* タイトルとドロップダウンを横並びに */}
+        <div className="result-page__header-section">
+          <h1 className="result-page__title">グレード別完登率</h1>
+          <div className="result-page__controls">
+            <select 
+              className="result-page__select" 
+              id="gymId" 
+              value={gymId} 
+              onChange={(e) => setGymId(Number(e.target.value))}
+            >
+              <option value="2">BMOなんば</option>
+              <option value="3">Dボルなんば</option>             
+            </select>
+            <select 
+              className="result-page__select" 
+              id="year" 
+              value={year} 
+              onChange={(e) => setYear(Number(e.target.value))}
+            >
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+            </select>
+          </div>
+        </div>
+
+        {/* グレード別チャート */}
         {resultInfo.map((gradeData) => {
           const chartData = buildChartData(gradeData)
           const actualData = chartData._actualData
@@ -172,7 +198,12 @@ export const ResultPage = () => {
 
           return (
             <div key={gradeData.grade} className="result-page__chart-container">
-              <div className="result-page__chart-title">{gradeData.grade}</div>
+              <div 
+                className="result-page__chart-title" 
+                style={{ color: GRADE_COLORS[gradeData.grade] || 'rgb(128, 128, 128)' }}
+              >
+                {gradeData.grade}
+              </div>
               <div className="result-page__chart-wrapper">
                 <Bar data={barData} options={chartOptions(actualData)} />
               </div>
