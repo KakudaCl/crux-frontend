@@ -175,8 +175,8 @@ export const ResultPage = () => {
               value={gymId} 
               onChange={(e) => setGymId(Number(e.target.value))}
             >
-              <option value="2">BMOなんば</option>
-              <option value="3">Dボルなんば</option>             
+              <option value="2">クライミングバム大阪店</option>
+              <option value="3">CRUX大阪</option>             
             </select>
             <select 
               className="result-page__select" 

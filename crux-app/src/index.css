@@ -91,7 +91,7 @@ button:focus-visible {
 .result-page__header-logo {
   font-family: 'Stick No Bills', sans-serif;
   font-size: 40px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 2px;
 }
 
@@ -104,6 +104,8 @@ button:focus-visible {
   color: white;
   text-decoration: none;
   font-size: 14px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 800;
   padding: 5px 10px;
   border-radius: 4px;
   transition: background-color 0.2s;
@@ -178,7 +180,7 @@ button:focus-visible {
 .result-page__chart-title {
   font-size: 48px;
   font-family: 'Stick No Bills', sans-serif;
-  font-weight: bold;
+  font-weight: 800;
   margin-bottom: 20px;
   text-align: left;
   line-height: 1;
