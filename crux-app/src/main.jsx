@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 import { ResultPage } from './components/ResultPage.jsx'
 import { ResultPageArea } from './components/ResultPageArea.jsx'
+import StateBasic from './demo/StateBasic.jsx'
 
 const queryClient = new QueryClient()
 
@@ -13,6 +14,7 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <ResultPage />
       <ResultPageArea />
+      <StateBasic init={0} />
     </QueryClientProvider>
   </StrictMode>,
 )
