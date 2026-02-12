@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import axios from 'axios'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Dropdown } from 'react-bootstrap'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -169,24 +171,41 @@ export const ResultPage = () => {
         <div className="result-page__header-section">
           <h1 className="result-page__title">マンスリー別完登率</h1>
           <div className="result-page__controls">
-            <select 
-              className="result-page__select" 
-              id="gymId" 
-              value={gymId} 
-              onChange={(e) => setGymId(Number(e.target.value))}
-            >
-              <option value="2">クライミングバム大阪店</option>
-              <option value="3">CRUX大阪</option>             
-            </select>
-            <select 
-              className="result-page__select" 
-              id="year" 
-              value={year} 
-              onChange={(e) => setYear(Number(e.target.value))}
-            >
-              <option value="2025">2025</option>
-              <option value="2026">2026</option>
-            </select>
+            <Dropdown>
+              <Dropdown.Toggle 
+                variant="primary" 
+                id="dropdown-gym"
+                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+              >
+                {gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setGymId(2)}>
+                  クライミングバム大阪店
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setGymId(3)}>
+                  CRUX大阪
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Dropdown>
+              <Dropdown.Toggle 
+                variant="primary" 
+                id="dropdown-year"
+                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+              >
+                {year}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setYear(2025)}>
+                  2025
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setYear(2026)}>
+                  2026
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
 
