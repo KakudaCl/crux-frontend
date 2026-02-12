@@ -158,7 +158,7 @@ export const ResultPage = () => {
       <header className="result-page__header">
         <div className="result-page__header-logo">BOLLOG</div>
         <nav className="result-page__header-nav">
-          <a href="#" className="result-page__nav-link result-page__nav-link--active">グレード別完登率</a>
+          <a href="#" className="result-page__nav-link result-page__nav-link--active">マンスリー別完登率</a>
           <a href="#" className="result-page__nav-link">エリア別完登率</a>
           <a href="#" className="result-page__nav-link">トライログ</a>
         </nav>
@@ -167,7 +167,7 @@ export const ResultPage = () => {
       <div className="result-page__container">
         {/* タイトルとドロップダウンを横並びに */}
         <div className="result-page__header-section">
-          <h1 className="result-page__title">グレード別完登率</h1>
+          <h1 className="result-page__title">マンスリー別完登率</h1>
           <div className="result-page__controls">
             <select 
               className="result-page__select" 
@@ -190,7 +190,7 @@ export const ResultPage = () => {
           </div>
         </div>
 
-        {/* グレード別チャート */}
+        {/* マンスリー別チャート */}
         {resultInfo.map((gradeData) => {
           const chartData = buildChartData(gradeData)
           const actualData = chartData._actualData

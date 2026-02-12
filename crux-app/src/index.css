@@ -136,7 +136,8 @@ button:focus-visible {
 
 .result-page__title {
   font-size: 32px;
-  font-weight: bold;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 800;
   color: #333;
   margin: 0;
 }
