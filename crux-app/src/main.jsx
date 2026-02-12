@@ -12,7 +12,6 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ResultPage />
       <ResultPageArea />
     </QueryClientProvider>
   </StrictMode>,

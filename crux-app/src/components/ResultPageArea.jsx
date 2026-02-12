@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import axios from 'axios'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { Dropdown } from 'react-bootstrap'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,15 +24,16 @@ ChartJS.register(
 )
 
 const GRADE_COLORS = {
-  V1: 'rgb(255, 255, 0)',
+  V1: 'rgb(228, 228, 5)',
   V2: 'rgb(255, 0, 0)',
   V3: 'rgb(139, 69, 19)',
+  V4: 'rgb(134, 134, 134)',
   入門: 'rgb(255, 182, 193)',
-  '8-6級': 'rgb(255, 165, 0)',
-  '5級': 'rgb(255, 255, 255)',
-  '4級': 'rgb(255, 255, 0)',
-  '3級': 'rgb(0, 128, 0)',
-  '2級': 'rgb(255, 0, 0)',
+  '8-6Q': 'rgb(255, 165, 0)',
+  '5Q': 'rgb(231, 231, 231)',
+  '4Q': 'rgb(225, 225, 0)',
+  '3Q': 'rgb(0, 128, 0)',
+  '2Q': 'rgb(255, 0, 0)',
 }
 
 function buildChartData(gradeData) {
@@ -148,19 +151,60 @@ export const ResultPageArea = () => {
 
   return (
     <div className="result-page">
-      <div className="result-page__container">
-        <select id="year" value={year} onChange={(e) => setYear(Number(e.target.value))}>
-          <option value={2025}>2025</option>
-          <option value={2026}>2026</option>
-        </select>
-        <select id="gymId" value={gymId} onChange={(e) => setGymId(Number(e.target.value))}>
-          <option value={2}>BMO</option>
-          <option value={3}>CRX</option>
-        </select>
-        <h1 className="result-page__title">
-          {year} {gymId === 2 ? 'BMO' : 'CRX'} Area - Top Rate by Area
-        </h1>
+      {/* ヘッダー */}
+      <header className="result-page__header">
+        <div className="result-page__header-logo">BOLLOG</div>
+        <nav className="result-page__header-nav">
+          <a href="#" className="result-page__nav-link">マンスリー別完登率</a>
+          <a href="#" className="result-page__nav-link result-page__nav-link--active">エリア別完登率</a>
+          <a href="#" className="result-page__nav-link">トライログ</a>
+        </nav>
+      </header>
 
+      <div className="result-page__container">
+      <div className="result-page__header-section">
+          <h1 className="result-page__title">エリア別完登率</h1>
+          <div className="result-page__controls">
+
+          <Dropdown>
+              <Dropdown.Toggle 
+                variant="primary" 
+                id="dropdown-gym"
+                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+              >
+                {gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setGymId(2)}>
+                  クライミングバム大阪店
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setGymId(3)}>
+                  CRUX大阪
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Dropdown>
+              <Dropdown.Toggle 
+                variant="primary" 
+                id="dropdown-year"
+                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+              >
+                {year}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setYear(2025)}>
+                  2025
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setYear(2026)}>
+                  2026
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+          </div>
+        </div>
+        
         {resultInfo.map((gradeData) => {
           const chartData = buildChartData(gradeData)
           const actualData = chartData._actualData
@@ -168,7 +212,12 @@ export const ResultPageArea = () => {
 
           return (
             <div key={gradeData.grade} className="result-page__chart-container">
-              <div className="result-page__chart-title">{gradeData.grade}</div>
+              <div 
+                className="result-page__chart-title" 
+                style={{ color: GRADE_COLORS[gradeData.grade] || 'rgb(128, 128, 128)' }}
+              >
+                {gradeData.grade}
+              </div>
               <div className="result-page__chart-wrapper">
                 <Bar data={barData} options={chartOptions(actualData)} />
               </div>
