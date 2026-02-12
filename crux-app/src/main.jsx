@@ -14,7 +14,6 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <ResultPage />
       <ResultPageArea />
-      <StateBasic init={0} />
     </QueryClientProvider>
   </StrictMode>,
 )
