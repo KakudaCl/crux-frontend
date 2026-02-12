@@ -177,6 +177,7 @@ button:focus-visible {
 
 .result-page__chart-title {
   font-size: 48px;
+  font-family: 'Stick No Bills', sans-serif;
   font-weight: bold;
   margin-bottom: 20px;
   text-align: left;
@@ -185,5 +186,7 @@ button:focus-visible {
 
 .result-page__chart-wrapper {
   max-height: 400px;
+  max-width: 800px;
+  margin: 0 auto;
   position: relative;
 }
