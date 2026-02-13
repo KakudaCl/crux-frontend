@@ -248,11 +248,11 @@ export const TrylogPage = () => {
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col" style={{width: '20%'}}>#</th>
-                    <th scope="col" style={{width: '20%'}}>Result</th>
+                    <th scope="col" style={{width: '15%'}}>#</th>
+                    <th scope="col" style={{width: '15%'}}>Result</th>
                     <th scope="col" style={{width: '20%'}}>Area</th>
                     <th scope="col" style={{width: '10%'}}>Day</th>
-                    <th scope="col" style={{width: '30%'}}>Remarks</th>
+                    <th scope="col" style={{width: '40%'}}>Remarks</th>
                   </tr>
                 </thead>
                 <tbody>
