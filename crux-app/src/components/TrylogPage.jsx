@@ -116,6 +116,17 @@ const chartOptions = (actualData) => ({
   },
 })
 
+const getResultColor = (result) => {
+  const colorMap = {
+    'FLASH': '#ff00ff',
+    'TOP': '#e60033',
+    'ZONE': '#f08300',
+    'N.S.': '#c0c6c9'
+  };
+  return colorMap[result] || '#000000';  // デフォルトは黒
+};
+
+
 export const TrylogPage = () => {
 
   const [year, setYear] = useState(2025)
@@ -248,7 +259,7 @@ export const TrylogPage = () => {
                   {trylogData.try_log.map((log) => (
                     <tr key={log.prob_no}>
                       <td scope="row" style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26, verticalAlign: 'middle', color: `#${log.grade_color}` }}>{log.prob_no}</td>
-                      <td style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26, verticalAlign: 'middle' }}>{log.result}</td>
+                      <td style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26, verticalAlign: 'middle', color: getResultColor(log.result) }}>{log.result}</td>
                       <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.area}</td>
                       <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.day_count}</td>
                       <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.remarks}</td>
