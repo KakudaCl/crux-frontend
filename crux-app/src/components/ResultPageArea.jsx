@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Dropdown } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -155,8 +156,8 @@ export const ResultPageArea = () => {
       <header className="result-page__header">
         <div className="result-page__header-logo">BOLLOG</div>
         <nav className="result-page__header-nav">
-          <a href="#" className="result-page__nav-link">マンスリー別完登率</a>
-          <a href="#" className="result-page__nav-link result-page__nav-link--active">エリア別完登率</a>
+          <Link to="/month" className="result-page__nav-link">マンスリー別完登率</Link>
+          <Link to="/area" className="result-page__nav-link result-page__nav-link--active">エリア別完登率</Link>
           <a href="#" className="result-page__nav-link">トライログ</a>
         </nav>
       </header>
