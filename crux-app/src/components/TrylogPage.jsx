@@ -39,11 +39,11 @@ const GRADE_COLORS = {
 
 function buildChartData(gradeData) {
   const grade = gradeData.grade
-  const areaData = gradeData.area_info || []
+  const monthlyData = gradeData.monthly_info || []
   const displayData = []
   const actualData = []
 
-  areaData.forEach((item) => {
+  monthlyData.forEach((item) => {
     if (item.top_rate === null) {
       displayData.push(null)
     } else if (item.top_rate === 0 && item.boulder_count >= 1) {
@@ -55,14 +55,14 @@ function buildChartData(gradeData) {
   })
 
   return {
-    labels: areaData.map((item) => item.area_name),
+    labels: monthlyData.map((item) => item.month),
     datasets: [
       {
         label: `${grade} Top Rate (%)`,
         data: displayData,
         backgroundColor: GRADE_COLORS[grade] ?? 'rgb(128, 128, 128)',
-        borderColor: grade === '5級' ? 'rgb(200, 200, 200)' : GRADE_COLORS[grade] || 'rgb(128, 128, 128)',
-        borderWidth: grade === '5級' ? 2 : 1,
+        borderColor: grade === "5級" ? 'rgb(200, 200, 200)' : GRADE_COLORS[grade] || 'rgb(128, 128, 128)',
+        borderWidth: grade === "5級" ? 2 : 1,
       },
     ],
     _actualData: actualData,
@@ -84,7 +84,7 @@ const chartOptions = (actualData) => ({
     x: {
       title: {
         display: true,
-        text: 'Area',
+        text: 'Month',
       },
     },
   },
@@ -116,14 +116,20 @@ const chartOptions = (actualData) => ({
   },
 })
 
-export const ResultPageArea = () => {
+export const TrylogPage = () => {
+
   const [year, setYear] = useState(2025)
-  const [gymId, setGymId] = useState(2)
+  const [gymId, setGymId] = useState(3)
+  const [month, setMonth] = useState(1)
+
+  const [gymForm, setGymForm] = useState({
+    gyms: [2, 3]
+  });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['topRatesByArea', year, gymId],
+    queryKey: ['topRates', year, gymId],
     queryFn: async () => {
-      const response = await axios.get(`/api/top_rates_area?year=${year}&gym_id=${gymId}&period=3`)
+      const response = await axios.get(`/api/trylog?year=${year}&month=${month}&gym_id=${gymId}`)
       return response.data
     },
   })
@@ -148,7 +154,7 @@ export const ResultPageArea = () => {
     )
   }
 
-  const resultInfo = data?.result_info ?? []
+  const trylogInfo = data?.all_logs ?? []
 
   return (
     <div className="result-page">
@@ -157,17 +163,17 @@ export const ResultPageArea = () => {
         <div className="result-page__header-logo">BOLLOG</div>
         <nav className="result-page__header-nav">
           <Link to="/month" className="result-page__nav-link">マンスリー別完登率</Link>
-          <Link to="/area" className="result-page__nav-link result-page__nav-link--active">エリア別完登率</Link>
-          <Link to="/trylog" className="result-page__nav-link">トライログ</Link>
+          <Link to="/area" className="result-page__nav-link">エリア別完登率</Link>
+          <Link to="/trylog" className="result-page__nav-link result-page__nav-link--active">トライログ</Link>
         </nav>
       </header>
 
       <div className="result-page__container">
-      <div className="result-page__header-section">
-          <h1 className="result-page__title">エリア別完登率</h1>
+        {/* タイトルとドロップダウンを横並びに */}
+        <div className="result-page__header-section">
+          <h1 className="result-page__title">トライログ</h1>
           <div className="result-page__controls">
-
-          <Dropdown>
+            <Dropdown>
               <Dropdown.Toggle 
                 variant="primary" 
                 id="dropdown-gym"
@@ -203,25 +209,53 @@ export const ResultPageArea = () => {
               </Dropdown.Menu>
             </Dropdown>
 
+            <Dropdown>
+              <Dropdown.Toggle 
+                variant="primary" 
+                id="dropdown-year"
+                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+              >
+                {month}月
+              </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                    <Dropdown.Item key={month} onClick={() => setMonth(month)}>
+                      {month}月
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
           </div>
         </div>
-        
-        {resultInfo.map((gradeData) => {
-          const chartData = buildChartData(gradeData)
-          const actualData = chartData._actualData
-          const { _actualData, ...barData } = chartData
 
+        {trylogInfo.map((trylogData) => {
           return (
-            <div key={gradeData.grade} className="result-page__chart-container">
-              <div 
-                className="result-page__chart-title" 
-                style={{ color: GRADE_COLORS[gradeData.grade] || 'rgb(128, 128, 128)' }}
-              >
-                {gradeData.grade}
+            <div key={trylogData.id} className="result-page__chart-container">
+              <div className="result-page__chart-title">
+                {trylogData.try_date}
               </div>
-              <div className="result-page__chart-wrapper">
-                <Bar data={barData} options={chartOptions(actualData)} />
-              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Result</th>
+                    <th scope="col">Area</th>
+                    <th scope="col">Day</th>
+                    <th scope="col">Remarks</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {trylogData.try_log.map((log) => (
+                    <tr key={log.prob_no}>
+                      <td scope="row">{log.prob_no}</td>
+                      <td>{log.result}</td>
+                      <td>{log.area}</td>
+                      <td>{log.day_count}</td>
+                      <td>{log.remarks}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )
         })}

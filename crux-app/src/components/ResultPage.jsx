@@ -163,7 +163,7 @@ export const ResultPage = () => {
         <nav className="result-page__header-nav">
           <Link to="/month" className="result-page__nav-link result-page__nav-link--active">マンスリー別完登率</Link>
           <Link to="/area" className="result-page__nav-link">エリア別完登率</Link>
-          <a href="#" className="result-page__nav-link">トライログ</a>
+          <Link to="/trylog" className="result-page__nav-link">トライログ</Link>
         </nav>
       </header>
 
