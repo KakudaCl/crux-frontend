@@ -237,21 +237,21 @@ export const TrylogPage = () => {
               <table class="table">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Result</th>
-                    <th scope="col">Area</th>
-                    <th scope="col">Day</th>
-                    <th scope="col">Remarks</th>
+                    <th scope="col" style={{width: '20%'}}>#</th>
+                    <th scope="col" style={{width: '20%'}}>Result</th>
+                    <th scope="col" style={{width: '20%'}}>Area</th>
+                    <th scope="col" style={{width: '10%'}}>Day</th>
+                    <th scope="col" style={{width: '30%'}}>Remarks</th>
                   </tr>
                 </thead>
                 <tbody>
                   {trylogData.try_log.map((log) => (
                     <tr key={log.prob_no}>
-                      <td scope="row" style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26 }}>{log.prob_no}</td>
-                      <td style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26 }}>{log.result}</td>
-                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16 }}>{log.area}</td>
-                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16 }}>{log.day_count}</td>
-                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16 }}>{log.remarks}</td>
+                      <td scope="row" style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26, verticalAlign: 'middle', color: `#${log.grade_color}` }}>{log.prob_no}</td>
+                      <td style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26, verticalAlign: 'middle' }}>{log.result}</td>
+                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.area}</td>
+                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.day_count}</td>
+                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.remarks}</td>
                     </tr>
                   ))}
                 </tbody>
