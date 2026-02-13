@@ -127,7 +127,7 @@ export const TrylogPage = () => {
   });
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['topRates', year, gymId],
+    queryKey: ['topRates', year, gymId, month],
     queryFn: async () => {
       const response = await axios.get(`/api/trylog?year=${year}&month=${month}&gym_id=${gymId}`)
       return response.data
@@ -247,11 +247,11 @@ export const TrylogPage = () => {
                 <tbody>
                   {trylogData.try_log.map((log) => (
                     <tr key={log.prob_no}>
-                      <td scope="row">{log.prob_no}</td>
-                      <td>{log.result}</td>
-                      <td>{log.area}</td>
-                      <td>{log.day_count}</td>
-                      <td>{log.remarks}</td>
+                      <td scope="row" style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26 }}>{log.prob_no}</td>
+                      <td style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26 }}>{log.result}</td>
+                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16 }}>{log.area}</td>
+                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16 }}>{log.day_count}</td>
+                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16 }}>{log.remarks}</td>
                     </tr>
                   ))}
                 </tbody>
