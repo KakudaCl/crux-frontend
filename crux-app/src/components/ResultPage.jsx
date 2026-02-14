@@ -178,9 +178,12 @@ export const ResultPage = () => {
                 id="dropdown-gym"
                 style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
               >
-                {gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
+                {gymId === 1 ? 'Dボルダリングなんば' : gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
               </Dropdown.Toggle>
               <Dropdown.Menu>
+              <Dropdown.Item onClick={() => setGymId(1)}>
+                  Dボルダリングなんば
+                </Dropdown.Item>
                 <Dropdown.Item onClick={() => setGymId(2)}>
                   クライミングバム大阪店
                 </Dropdown.Item>
