@@ -119,7 +119,7 @@ const chartOptions = (actualData) => ({
 
 export const ResultPage = () => {
 
-  const [year, setYear] = useState(2025)
+  const [year, setYear] = useState(new Date().getFullYear())
   const [gymId, setGymId] = useState(3)
 
   const [gymForm, setGymForm] = useState({

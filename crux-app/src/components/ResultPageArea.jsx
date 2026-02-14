@@ -118,8 +118,8 @@ const chartOptions = (actualData) => ({
 })
 
 export const ResultPageArea = () => {
-  const [year, setYear] = useState(2025)
-  const [gymId, setGymId] = useState(2)
+  const [year, setYear] = useState(new Date().getFullYear())
+  const [gymId, setGymId] = useState(3)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['topRatesByArea', year, gymId],
