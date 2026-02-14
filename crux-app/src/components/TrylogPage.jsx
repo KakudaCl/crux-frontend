@@ -133,11 +133,7 @@ export const TrylogPage = () => {
   const [gymId, setGymId] = useState(3)
   const [month, setMonth] = useState(new Date().getMonth() + 1)
 
-  const [gymForm, setGymForm] = useState({
-    gyms: [2, 3]
-  });
-
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ['topRates', year, gymId, month],
     queryFn: async () => {
       const response = await axios.get(`/api/trylog?year=${year}&month=${month}&gym_id=${gymId}`)
@@ -145,7 +141,7 @@ export const TrylogPage = () => {
     },
   })
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <div className="result-page">
         <div className="result-page__container">
