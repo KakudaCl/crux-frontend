@@ -190,7 +190,7 @@ export const TrylogPage = () => {
                 id="dropdown-gym"
                 style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
               >
-                {gymId === 1 ? 'Dボルダリングなんば' : gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
+                {gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => setGymId(1)}>

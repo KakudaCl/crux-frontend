@@ -39,6 +39,7 @@ const GRADE_COLORS = {
 
 function buildChartData(gradeData) {
   const grade = gradeData.grade
+  const grade_color = '#' + gradeData.grade_color
   const areaData = gradeData.area_info || []
   const displayData = []
   const actualData = []
@@ -60,8 +61,8 @@ function buildChartData(gradeData) {
       {
         label: `${grade} Top Rate (%)`,
         data: displayData,
-        backgroundColor: GRADE_COLORS[grade] ?? 'rgb(128, 128, 128)',
-        borderColor: grade === '5級' ? 'rgb(200, 200, 200)' : GRADE_COLORS[grade] || 'rgb(128, 128, 128)',
+        backgroundColor: grade_color ?? 'rgb(128, 128, 128)',
+        borderColor: grade === '5級' ? 'rgb(200, 200, 200)' : grade_color || 'rgb(128, 128, 128)',
         borderWidth: grade === '5級' ? 2 : 1,
       },
     ],
@@ -218,7 +219,7 @@ export const ResultPageArea = () => {
             <div key={gradeData.grade} className="result-page__chart-container">
               <div 
                 className="result-page__chart-title" 
-                style={{ color: GRADE_COLORS[gradeData.grade] || 'rgb(128, 128, 128)' }}
+                style={{ color: '#' + gradeData.grade_color || 'rgb(128, 128, 128)' }}
               >
                 {gradeData.grade}
               </div>
