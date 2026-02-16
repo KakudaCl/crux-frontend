@@ -120,11 +120,12 @@ const chartOptions = (actualData) => ({
 export const ResultPageArea = () => {
   const [year, setYear] = useState(new Date().getFullYear())
   const [gymId, setGymId] = useState(3)
+  const [period, setPeriod] = useState(3)
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['topRatesByArea', year, gymId],
+    queryKey: ['topRatesByArea', year, gymId, period],
     queryFn: async () => {
-      const response = await axios.get(`/api/top_rates_area?year=${year}&gym_id=${gymId}&period=3`)
+      const response = await axios.get(`/api/top_rates_area?year=${year}&gym_id=${gymId}&period=${period}`)
       return response.data
     },
   })
@@ -203,6 +204,27 @@ export const ResultPageArea = () => {
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => setYear(2026)}>
                   2026
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <Dropdown>
+              <Dropdown.Toggle 
+                variant="primary" 
+                id="dropdown-period"
+                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+              >
+                {period === 1 ? '上半期' : period === 2 ? '下半期' : '年間'}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => setPeriod(1)}>
+                  上半期
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPeriod(2)}>
+                  下半期
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => setPeriod(3)}>
+                  年間
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
