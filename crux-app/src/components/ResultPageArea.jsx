@@ -161,15 +161,15 @@ export const ResultPageArea = () => {
       <header className="result-page__header">
         <div className="result-page__header-logo">BOLLOG</div>
         <nav className="result-page__header-nav">
-          <Link to="/month" className="result-page__nav-link">
+          <Link to="/month" className="result-page__nav-link result-page__nav-link--month">
             <img src={GreenHoldImage} style={{ width: '20px', height: '20px', marginRight: '10px' }} alt="マンスリー別完登率" />
             マンスリー別完登率
           </Link>
-          <Link to="/area" className="result-page__nav-link result-page__nav-link--active">
+          <Link to="/area" className="result-page__nav-link result-page__nav-link--area result-page__nav-link--active">
             <img src={BlueHoldImage} style={{ width: '20px', height: '20px', marginRight: '10px' }} alt="エリア別完登率" />
             エリア別完登率
           </Link>
-          <Link to="/trylog" className="result-page__nav-link">
+          <Link to="/trylog" className="result-page__nav-link result-page__nav-link--trylog">
             <img src={YellowHoldImage} style={{ width: '17px', marginRight: '10px' }} alt="トライログ" />
             トライログ
           </Link>
