@@ -138,6 +138,7 @@ button:focus-visible {
   font-size: 32px;
   font-family: 'Noto Sans JP', sans-serif;
   font-weight: 800;
+  text-align: left;
   color: #333;
   margin: 0;
 }

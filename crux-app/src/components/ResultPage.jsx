@@ -14,6 +14,9 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import GreenHoldImage from '../images/green_hold.png'
+import BlueHoldImage from '../images/blue_hold.png'
+import YellowHoldImage from '../images/yellow_hold.png'
 
 ChartJS.register(
   CategoryScale,
@@ -162,16 +165,28 @@ export const ResultPage = () => {
       <header className="result-page__header">
         <div className="result-page__header-logo">BOLLOG</div>
         <nav className="result-page__header-nav">
-          <Link to="/month" className="result-page__nav-link result-page__nav-link--active">マンスリー別完登率</Link>
-          <Link to="/area" className="result-page__nav-link">エリア別完登率</Link>
-          <Link to="/trylog" className="result-page__nav-link">トライログ</Link>
+          <Link to="/month" className="result-page__nav-link result-page__nav-link--active">
+            <img src={GreenHoldImage} style={{ width: '20px', marginRight: '10px' }} alt="マンスリー別完登率" />
+            マンスリー別完登率
+          </Link>
+          <Link to="/area" className="result-page__nav-link">
+            <img src={BlueHoldImage} style={{ width: '20px', marginRight: '10px' }} alt="エリア別完登率" />
+            エリア別完登率
+          </Link>
+          <Link to="/trylog" className="result-page__nav-link">
+            <img src={YellowHoldImage} style={{ width: '17px', marginRight: '10px' }} alt="トライログ" />
+            トライログ
+          </Link>
         </nav>
       </header>
 
       <div className="result-page__container">
         {/* タイトルとドロップダウンを横並びに */}
         <div className="result-page__header-section">
-          <h1 className="result-page__title">マンスリー別完登率</h1>
+          <h1 className="result-page__title">
+            <img src={GreenHoldImage} style={{ width: '8%', marginRight: '14px' }} alt="マンスリー別完登率" />
+            マンスリー別完登率
+          </h1>
           <div className="result-page__controls">
             <Dropdown>
               <Dropdown.Toggle 
