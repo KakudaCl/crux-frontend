@@ -17,6 +17,7 @@ import { Bar } from 'react-chartjs-2'
 import GreenHoldImage from '../images/green_hold.png'
 import BlueHoldImage from '../images/blue_hold.png'
 import YellowHoldImage from '../images/yellow_hold.png'
+import EscalationImage from '../images/escalation_icon.png'
 
 ChartJS.register(
   CategoryScale,
@@ -181,6 +182,7 @@ export const ResultPageArea = () => {
           <h1 className="result-page__title">
             <img src={BlueHoldImage} style={{ width: '9%', marginRight: '20px' }} alt="エリア別完登率" />
             エリア別完登率
+            <img src={EscalationImage} style={{ width: '40px', marginLeft: '10px', marginBottom: '6px' }}/>
           </h1>
           <div className="result-page__controls">
 
