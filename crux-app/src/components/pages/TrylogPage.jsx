@@ -1,10 +1,8 @@
-import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Dropdown } from 'react-bootstrap';
-import { PageHeader } from '../parts/PageHeader';
-import { getResultColor } from '../utilities/ResultColor';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,8 +12,12 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import YellowHoldImage from '../../assets/images/yellow_hold.png';
+import { Dropdown } from 'react-bootstrap';
+
 import EscalationImage from '../../assets/images/escalation_icon.png';
+import YellowHoldImage from '../../assets/images/yellow_hold.png';
+import { PageHeader } from '../parts/PageHeader';
+import { getResultColor } from '../utilities/ResultColor';
 
 ChartJS.register(
   CategoryScale,

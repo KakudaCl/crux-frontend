@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import GreenHoldImage from '../../assets/images/green_hold.png';
+
 import BlueHoldImage from '../../assets/images/blue_hold.png';
+import GreenHoldImage from '../../assets/images/green_hold.png';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
 
 export const PageHeader = () => {
