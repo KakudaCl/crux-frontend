@@ -4,6 +4,7 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Dropdown } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import { PageHeader } from '../parts/PageHeader'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -170,23 +171,7 @@ export const TrylogPage = () => {
   return (
     <div className="result-page">
       {/* ヘッダー */}
-      <header className="result-page__header">
-        <div className="result-page__header-logo">BOLLOG</div>
-        <nav className="result-page__header-nav">
-          <Link to="/month" className="result-page__nav-link result-page__nav-link--month">
-            <img src={GreenHoldImage} style={{ width: '20px', marginRight: '10px' }} alt="マンスリー別完登率" />
-            マンスリー別完登率
-          </Link>
-          <Link to="/area" className="result-page__nav-link result-page__nav-link--area">
-            <img src={BlueHoldImage} style={{ width: '20px', marginRight: '10px' }} alt="エリア別完登率" />
-            エリア別完登率
-          </Link>
-          <Link to="/trylog" className="result-page__nav-link result-page__nav-link--trylog result-page__nav-link--active">
-            <img src={YellowHoldImage} style={{ width: '17px', marginRight: '10px' }} alt="トライログ" />
-            トライログ
-          </Link>
-        </nav>
-      </header>
+      <PageHeader />
 
       <div className="result-page__container">
         {/* タイトルとドロップダウンを横並びに */}
