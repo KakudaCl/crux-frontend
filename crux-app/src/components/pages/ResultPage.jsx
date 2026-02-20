@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
-import axios from 'axios'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Dropdown } from 'react-bootstrap'
-import { PageHeader } from '../parts/PageHeader'
-import { chartOptions } from '../utilities/ChartOptions'
-import { buildChartData } from '../utilities/ChartData'
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Dropdown } from 'react-bootstrap';
+import { PageHeader } from '../parts/PageHeader';
+import { chartOptions } from '../utilities/ChartOptions';
+import { buildChartData } from '../utilities/ChartData';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,10 +14,10 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js'
-import { Bar } from 'react-chartjs-2'
-import GreenHoldImage from '../../assets/images/green_hold.png'
-import EscalationImage from '../../assets/images/escalation_icon.png'
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+import GreenHoldImage from '../../assets/images/green_hold.png';
+import EscalationImage from '../../assets/images/escalation_icon.png';
 
 ChartJS.register(
   CategoryScale,
@@ -26,20 +26,21 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend
-)
+);
 
 export const ResultPage = () => {
-
-  const [year, setYear] = useState(new Date().getFullYear())
-  const [gymId, setGymId] = useState(3)
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [gymId, setGymId] = useState(3);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['topRates', year, gymId],
     queryFn: async () => {
-      const response = await axios.get(`/api/top_rates?year=${year}&gym_id=${gymId}`)
-      return response.data
+      const response = await axios.get(
+        `/api/top_rates?year=${year}&gym_id=${gymId}`
+      );
+      return response.data;
     },
-  })
+  });
 
   if (isLoading) {
     return (
@@ -48,7 +49,7 @@ export const ResultPage = () => {
           <p>読み込み中...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -58,10 +59,10 @@ export const ResultPage = () => {
           <p>エラー: {error.message}</p>
         </div>
       </div>
-    )
+    );
   }
 
-  const resultInfo = data?.result_info ?? []
+  const resultInfo = data?.result_info ?? [];
 
   return (
     <div className="result-page">
@@ -72,21 +73,35 @@ export const ResultPage = () => {
         {/* タイトルとドロップダウンを横並びに */}
         <div className="result-page__header-section">
           <h1 className="result-page__title">
-            <img src={GreenHoldImage} style={{ width: '8%', marginRight: '14px' }} alt="マンスリー別完登率" />
+            <img
+              src={GreenHoldImage}
+              style={{ width: '8%', marginRight: '14px' }}
+              alt="マンスリー別完登率"
+            />
             マンスリー別完登率
-            <img src={EscalationImage} style={{ width: '40px', marginLeft: '10px', marginBottom: '6px' }}/>
+            <img
+              src={EscalationImage}
+              style={{ width: '40px', marginLeft: '10px', marginBottom: '6px' }}
+            />
           </h1>
           <div className="result-page__controls">
             <Dropdown>
-              <Dropdown.Toggle 
-                variant="primary" 
+              <Dropdown.Toggle
+                variant="primary"
                 id="dropdown-gym"
-                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+                style={{
+                  fontFamily: "'Noto Sans JP', sans-serif",
+                  fontWeight: 800,
+                }}
               >
-                {gymId === 1 ? 'Dボルダリングなんば' : gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
+                {gymId === 1
+                  ? 'Dボルダリングなんば'
+                  : gymId === 2
+                    ? 'クライミングバム大阪店'
+                    : 'CRUX大阪'}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-              <Dropdown.Item onClick={() => setGymId(1)}>
+                <Dropdown.Item onClick={() => setGymId(1)}>
                   Dボルダリングなんば
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => setGymId(2)}>
@@ -100,9 +115,12 @@ export const ResultPage = () => {
 
             <Dropdown>
               <Dropdown.Toggle
-                variant="primary" 
+                variant="primary"
                 id="dropdown-year"
-                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+                style={{
+                  fontFamily: "'Noto Sans JP', sans-serif",
+                  fontWeight: 800,
+                }}
               >
                 {year}
               </Dropdown.Toggle>
@@ -120,25 +138,30 @@ export const ResultPage = () => {
 
         {/* マンスリー別チャート */}
         {resultInfo.map((gradeData) => {
-          const chartData = buildChartData(gradeData, 'monthly_info', 'month')
-          const actualData = chartData._actualData
-          const { _actualData, ...barData } = chartData
+          const chartData = buildChartData(gradeData, 'monthly_info', 'month');
+          const actualData = chartData._actualData;
+          const { _actualData, ...barData } = chartData;
 
           return (
             <div key={gradeData.grade} className="result-page__chart-container">
-              <div 
-                className="result-page__chart-title" 
-                style={{ color: '#' + gradeData.grade_color || 'rgb(128, 128, 128)' }}
+              <div
+                className="result-page__chart-title"
+                style={{
+                  color: '#' + gradeData.grade_color || 'rgb(128, 128, 128)',
+                }}
               >
                 {gradeData.grade}
               </div>
               <div className="result-page__chart-wrapper">
-                <Bar data={barData} options={chartOptions(actualData, 'Month')} />
+                <Bar
+                  data={barData}
+                  options={chartOptions(actualData, 'Month')}
+                />
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};

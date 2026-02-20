@@ -13,5 +13,5 @@ export const RouteConfig = () => {
         <Route path="/trylog" element={<TrylogPage />} />
       </Routes>
     </BrowserRouter>
-  )
-}
+  );
+};
