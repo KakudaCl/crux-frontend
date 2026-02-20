@@ -14,10 +14,10 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
-import GreenHoldImage from '../images/green_hold.png'
-import BlueHoldImage from '../images/blue_hold.png'
-import YellowHoldImage from '../images/yellow_hold.png'
-import EscalationImage from '../images/escalation_icon.png'
+import GreenHoldImage from '../../assets/images/green_hold.png'
+import BlueHoldImage from '../../assets/images/blue_hold.png'
+import YellowHoldImage from '../../assets/images/yellow_hold.png'
+import EscalationImage from '../../assets/images/escalation_icon.png'
 
 ChartJS.register(
   CategoryScale,

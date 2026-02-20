@@ -14,10 +14,10 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
-import BlueHoldImage from '../images/blue_hold.png'
-import GreenHoldImage from '../images/green_hold.png'
-import YellowHoldImage from '../images/yellow_hold.png'
-import EscalationImage from '../images/escalation_icon.png'
+import GreenHoldImage from '../../assets/images/green_hold.png'
+import BlueHoldImage from '../../assets/images/blue_hold.png'
+import YellowHoldImage from '../../assets/images/yellow_hold.png'
+import EscalationImage from '../../assets/images/escalation_icon.png'
 
 ChartJS.register(
   CategoryScale,
@@ -43,6 +43,7 @@ const GRADE_COLORS = {
 
 function buildChartData(gradeData) {
   const grade = gradeData.grade
+  const grade_color = '#' + gradeData.grade_color
   const monthlyData = gradeData.monthly_info || []
   const displayData = []
   const actualData = []
@@ -64,8 +65,8 @@ function buildChartData(gradeData) {
       {
         label: `${grade} Top Rate (%)`,
         data: displayData,
-        backgroundColor: GRADE_COLORS[grade] ?? 'rgb(128, 128, 128)',
-        borderColor: grade === "5級" ? 'rgb(200, 200, 200)' : GRADE_COLORS[grade] || 'rgb(128, 128, 128)',
+        backgroundColor: grade_color ?? 'rgb(128, 128, 128)',
+        borderColor: grade === "5級" ? 'rgb(200, 200, 200)' : grade_color || 'rgb(128, 128, 128)',
         borderWidth: grade === "5級" ? 2 : 1,
       },
     ],
@@ -120,32 +121,24 @@ const chartOptions = (actualData) => ({
   },
 })
 
-const getResultColor = (result) => {
-  const colorMap = {
-    'FLASH': '#ff00ff',
-    'TOP': '#e60033',
-    'ZONE': '#f08300',
-    'N.S.': '#c0c6c9'
-  };
-  return colorMap[result] || '#000000';  // デフォルトは黒
-};
-
-
-export const TrylogPage = () => {
+export const ResultPage = () => {
 
   const [year, setYear] = useState(new Date().getFullYear())
   const [gymId, setGymId] = useState(3)
-  const [month, setMonth] = useState(new Date().getMonth() + 1)
 
-  const { data, isLoading, error, isFetching } = useQuery({
-    queryKey: ['topRates', year, gymId, month],
+  const [gymForm, setGymForm] = useState({
+    gyms: [2, 3]
+  });
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['topRates', year, gymId],
     queryFn: async () => {
-      const response = await axios.get(`/api/trylog?year=${year}&month=${month}&gym_id=${gymId}`)
+      const response = await axios.get(`/api/top_rates?year=${year}&gym_id=${gymId}`)
       return response.data
     },
   })
 
-  if (isLoading || isFetching) {
+  if (isLoading) {
     return (
       <div className="result-page">
         <div className="result-page__container">
@@ -165,7 +158,7 @@ export const TrylogPage = () => {
     )
   }
 
-  const trylogInfo = data?.all_logs ?? []
+  const resultInfo = data?.result_info ?? []
 
   return (
     <div className="result-page">
@@ -173,7 +166,7 @@ export const TrylogPage = () => {
       <header className="result-page__header">
         <div className="result-page__header-logo">BOLLOG</div>
         <nav className="result-page__header-nav">
-          <Link to="/month" className="result-page__nav-link result-page__nav-link--month">
+          <Link to="/month" className="result-page__nav-link result-page__nav-link--month result-page__nav-link--active">
             <img src={GreenHoldImage} style={{ width: '20px', marginRight: '10px' }} alt="マンスリー別完登率" />
             マンスリー別完登率
           </Link>
@@ -181,7 +174,7 @@ export const TrylogPage = () => {
             <img src={BlueHoldImage} style={{ width: '20px', marginRight: '10px' }} alt="エリア別完登率" />
             エリア別完登率
           </Link>
-          <Link to="/trylog" className="result-page__nav-link result-page__nav-link--trylog result-page__nav-link--active">
+          <Link to="/trylog" className="result-page__nav-link result-page__nav-link--trylog">
             <img src={YellowHoldImage} style={{ width: '17px', marginRight: '10px' }} alt="トライログ" />
             トライログ
           </Link>
@@ -192,8 +185,8 @@ export const TrylogPage = () => {
         {/* タイトルとドロップダウンを横並びに */}
         <div className="result-page__header-section">
           <h1 className="result-page__title">
-            <img src={YellowHoldImage} style={{ width: '8%', marginRight: '10px' }} alt="トライログ" />
-            トライログ
+            <img src={GreenHoldImage} style={{ width: '8%', marginRight: '14px' }} alt="マンスリー別完登率" />
+            マンスリー別完登率
             <img src={EscalationImage} style={{ width: '40px', marginLeft: '10px', marginBottom: '6px' }}/>
           </h1>
           <div className="result-page__controls">
@@ -206,9 +199,9 @@ export const TrylogPage = () => {
                 {gymId === 1 ? 'Dボルダリングなんば' : gymId === 2 ? 'クライミングバム大阪店' : 'CRUX大阪'}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setGymId(1)}>
+              <Dropdown.Item onClick={() => setGymId(1)}>
                   Dボルダリングなんば
-                  </Dropdown.Item>
+                </Dropdown.Item>
                 <Dropdown.Item onClick={() => setGymId(2)}>
                   クライミングバム大阪店
                 </Dropdown.Item>
@@ -219,7 +212,7 @@ export const TrylogPage = () => {
             </Dropdown>
 
             <Dropdown>
-              <Dropdown.Toggle 
+              <Dropdown.Toggle
                 variant="primary" 
                 id="dropdown-year"
                 style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
@@ -235,54 +228,26 @@ export const TrylogPage = () => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-
-            <Dropdown>
-              <Dropdown.Toggle 
-                variant="primary" 
-                id="dropdown-year"
-                style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
-              >
-                {month}月
-              </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                    <Dropdown.Item key={month} onClick={() => setMonth(month)}>
-                      {month}月
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
           </div>
         </div>
 
-        {trylogInfo.map((trylogData) => {
+        {/* マンスリー別チャート */}
+        {resultInfo.map((gradeData) => {
+          const chartData = buildChartData(gradeData)
+          const actualData = chartData._actualData
+          const { _actualData, ...barData } = chartData
+
           return (
-            <div key={trylogData.id} className="result-page__chart-container">
-              <div className="result-page__chart-title">
-                {trylogData.try_date}
+            <div key={gradeData.grade} className="result-page__chart-container">
+              <div 
+                className="result-page__chart-title" 
+                style={{ color: '#' + gradeData.grade_color || 'rgb(128, 128, 128)' }}
+              >
+                {gradeData.grade}
               </div>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col" style={{width: '15%'}}>#</th>
-                    <th scope="col" style={{width: '15%'}}>Result</th>
-                    <th scope="col" style={{width: '20%'}}>Area</th>
-                    <th scope="col" style={{width: '10%'}}>Day</th>
-                    <th scope="col" style={{width: '40%'}}>Remarks</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {trylogData.try_log.map((log) => (
-                    <tr key={log.prob_no}>
-                      <td scope="row" style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26, verticalAlign: 'middle', color: `#${log.grade_color}` }}>{log.prob_no}</td>
-                      <td style={{ fontFamily: "'Stick No Bills', sans-serif", fontWeight: 800, fontSize: 26, verticalAlign: 'middle', color: getResultColor(log.result) }}>{log.result}</td>
-                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.area}</td>
-                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.day_count}</td>
-                      <td style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800, fontSize: 16, verticalAlign: 'middle' }}>{log.remarks}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="result-page__chart-wrapper">
+                <Bar data={barData} options={chartOptions(actualData)} />
+              </div>
             </div>
           )
         })}

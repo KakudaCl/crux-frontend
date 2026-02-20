@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ResultPage } from './ResultPage';
-import { ResultPageArea } from './ResultPageArea';
-import { TrylogPage } from './TrylogPage';
+import { ResultPage } from '../components/pages/ResultPage';
+import { ResultPageArea } from '../components/pages/ResultPageArea';
+import { TrylogPage } from '../components/pages/TrylogPage';
 
 export const RouteConfig = () => {
   return (
