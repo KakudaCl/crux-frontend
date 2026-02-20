@@ -25,19 +25,6 @@ ChartJS.register(
   Legend
 )
 
-const GRADE_COLORS = {
-  V1: 'rgb(228, 228, 5)',
-  V2: 'rgb(255, 0, 0)',
-  V3: 'rgb(139, 69, 19)',
-  V4: 'rgb(134, 134, 134)',
-  入門: 'rgb(255, 182, 193)',
-  '8-6Q': 'rgb(255, 165, 0)',
-  '5Q': 'rgb(231, 231, 231)',
-  '4Q': 'rgb(225, 225, 0)',
-  '3Q': 'rgb(0, 128, 0)',
-  '2Q': 'rgb(255, 0, 0)',
-}
-
 const getResultColor = (result) => {
   const colorMap = {
     'FLASH': '#ff00ff',
