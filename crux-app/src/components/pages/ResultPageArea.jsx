@@ -4,6 +4,8 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Dropdown } from 'react-bootstrap'
 import { PageHeader } from '../parts/PageHeader'
+import { chartOptions } from '../utilities/ChartOptions'
+import { buildChartData } from '../utilities/ChartData'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,85 +28,6 @@ ChartJS.register(
   Legend
 )
 
-function buildChartData(gradeData) {
-  const grade = gradeData.grade
-  const grade_color = '#' + gradeData.grade_color
-  const areaData = gradeData.area_info || []
-  const displayData = []
-  const actualData = []
-
-  areaData.forEach((item) => {
-    if (item.top_rate === null) {
-      displayData.push(null)
-    } else if (item.top_rate === 0 && item.boulder_count >= 1) {
-      displayData.push(0.4)
-    } else {
-      displayData.push(item.top_rate)
-    }
-    actualData.push(item)
-  })
-
-  return {
-    labels: areaData.map((item) => item.area_name),
-    datasets: [
-      {
-        label: `${grade} Top Rate (%)`,
-        data: displayData,
-        backgroundColor: grade_color ?? 'rgb(128, 128, 128)',
-        borderColor: grade === '5級' ? 'rgb(200, 200, 200)' : grade_color || 'rgb(128, 128, 128)',
-        borderWidth: grade === '5級' ? 2 : 1,
-      },
-    ],
-    _actualData: actualData,
-  }
-}
-
-const chartOptions = (actualData) => ({
-  responsive: true,
-  maintainAspectRatio: true,
-  scales: {
-    y: {
-      beginAtZero: true,
-      max: 100,
-      title: {
-        display: true,
-        text: 'Top Rate (%)',
-      },
-    },
-    x: {
-      title: {
-        display: true,
-        text: 'Area',
-      },
-    },
-  },
-  plugins: {
-    tooltip: {
-      enabled: true,
-      mode: 'index',
-      intersect: false,
-      callbacks: {
-        title: (context) => context[0]?.label ?? '',
-        label: (context) => {
-          const index = context.dataIndex
-          if (index >= 0 && index < actualData.length) {
-            const item = actualData[index]
-            if (item.top_rate === null) return []
-            return [
-              `Top Rate: ${item.top_rate}%`,
-              `Boulder Count: ${item.boulder_count}`,
-              `Top Count: ${item.top_count}`,
-            ]
-          }
-          return []
-        },
-      },
-    },
-    legend: {
-      display: false,
-    },
-  },
-})
 
 export const ResultPageArea = () => {
   const [year, setYear] = useState(new Date().getFullYear())
@@ -219,7 +142,7 @@ export const ResultPageArea = () => {
         </div>
         
         {resultInfo.map((gradeData) => {
-          const chartData = buildChartData(gradeData)
+          const chartData = buildChartData(gradeData, 'area_info', 'area_name')
           const actualData = chartData._actualData
           const { _actualData, ...barData } = chartData
 
