@@ -3,7 +3,6 @@ import { useState } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Dropdown } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 import { PageHeader } from '../parts/PageHeader'
 import {
   Chart as ChartJS,
@@ -14,9 +13,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import { Bar } from 'react-chartjs-2'
-import BlueHoldImage from '../../assets/images/blue_hold.png'
-import GreenHoldImage from '../../assets/images/green_hold.png'
 import YellowHoldImage from '../../assets/images/yellow_hold.png'
 import EscalationImage from '../../assets/images/escalation_icon.png'
 
@@ -41,85 +37,6 @@ const GRADE_COLORS = {
   '3Q': 'rgb(0, 128, 0)',
   '2Q': 'rgb(255, 0, 0)',
 }
-
-function buildChartData(gradeData) {
-  const grade = gradeData.grade
-  const monthlyData = gradeData.monthly_info || []
-  const displayData = []
-  const actualData = []
-
-  monthlyData.forEach((item) => {
-    if (item.top_rate === null) {
-      displayData.push(null)
-    } else if (item.top_rate === 0 && item.boulder_count >= 1) {
-      displayData.push(0.4)
-    } else {
-      displayData.push(item.top_rate)
-    }
-    actualData.push(item)
-  })
-
-  return {
-    labels: monthlyData.map((item) => item.month),
-    datasets: [
-      {
-        label: `${grade} Top Rate (%)`,
-        data: displayData,
-        backgroundColor: GRADE_COLORS[grade] ?? 'rgb(128, 128, 128)',
-        borderColor: grade === "5級" ? 'rgb(200, 200, 200)' : GRADE_COLORS[grade] || 'rgb(128, 128, 128)',
-        borderWidth: grade === "5級" ? 2 : 1,
-      },
-    ],
-    _actualData: actualData,
-  }
-}
-
-const chartOptions = (actualData) => ({
-  responsive: true,
-  maintainAspectRatio: true,
-  scales: {
-    y: {
-      beginAtZero: true,
-      max: 100,
-      title: {
-        display: true,
-        text: 'Top Rate (%)',
-      },
-    },
-    x: {
-      title: {
-        display: true,
-        text: 'Month',
-      },
-    },
-  },
-  plugins: {
-    tooltip: {
-      enabled: true,
-      mode: 'index',
-      intersect: false,
-      callbacks: {
-        title: (context) => context[0]?.label ?? '',
-        label: (context) => {
-          const index = context.dataIndex
-          if (index >= 0 && index < actualData.length) {
-            const item = actualData[index]
-            if (item.top_rate === null) return []
-            return [
-              `Top Rate: ${item.top_rate}%`,
-              `Boulder Count: ${item.boulder_count}`,
-              `Top Count: ${item.top_count}`,
-            ]
-          }
-          return []
-        },
-      },
-    },
-    legend: {
-      display: false,
-    },
-  },
-})
 
 const getResultColor = (result) => {
   const colorMap = {

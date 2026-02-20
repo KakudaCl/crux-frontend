@@ -3,7 +3,6 @@ import { useState } from 'react'
 import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Dropdown } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 import { PageHeader } from '../parts/PageHeader'
 import {
   Chart as ChartJS,
@@ -15,9 +14,7 @@ import {
   Legend,
 } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
-import GreenHoldImage from '../../assets/images/green_hold.png'
 import BlueHoldImage from '../../assets/images/blue_hold.png'
-import YellowHoldImage from '../../assets/images/yellow_hold.png'
 import EscalationImage from '../../assets/images/escalation_icon.png'
 
 ChartJS.register(
