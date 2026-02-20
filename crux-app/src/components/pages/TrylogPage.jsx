@@ -4,6 +4,7 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { Dropdown } from 'react-bootstrap'
 import { PageHeader } from '../parts/PageHeader'
+import { getResultColor } from '../utilities/ResultColor'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,17 +25,6 @@ ChartJS.register(
   Tooltip,
   Legend
 )
-
-const getResultColor = (result) => {
-  const colorMap = {
-    'FLASH': '#ff00ff',
-    'TOP': '#e60033',
-    'ZONE': '#f08300',
-    'N.S.': '#c0c6c9'
-  };
-  return colorMap[result] || '#000000';  // デフォルトは黒
-};
-
 
 export const TrylogPage = () => {
 
