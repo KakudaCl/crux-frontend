@@ -43,7 +43,7 @@ export const ResultPage = () => {
     queryKey: ['topRates', year, gymId],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/top_rates?year=${year}&gym_id=${gymId}`
+        `/api/top_rate/month?year=${year}&gym_id=${gymId}`
       );
       return response.data;
     },

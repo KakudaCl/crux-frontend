@@ -45,7 +45,7 @@ export const ResultPageArea = () => {
     queryKey: ['topRatesByArea', year, gymId, period],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/top_rates_area?year=${year}&gym_id=${gymId}&period=${period}`
+        `/api/top_rate/area?year=${year}&gym_id=${gymId}&period=${period}`
       );
       return response.data;
     },

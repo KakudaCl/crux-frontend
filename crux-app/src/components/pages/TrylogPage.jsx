@@ -42,7 +42,7 @@ export const TrylogPage = () => {
     queryKey: ['topRates', year, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog?year=${year}&month=${month}&gym_id=${gymId}`
+        `/api/trylog/list?year=${year}&month=${month}&gym_id=${gymId}`
       );
       return response.data;
     },
