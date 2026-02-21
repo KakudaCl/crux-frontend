@@ -16,6 +16,7 @@ import { Dropdown } from 'react-bootstrap';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
+import { useGyms } from '../../hooks/useGyms';
 import { PageHeader } from '../parts/PageHeader';
 import { getResultColor } from '../utilities/ResultColor';
 
@@ -32,6 +33,10 @@ export const TrylogPage = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [gymId, setGymId] = useState(3);
   const [month, setMonth] = useState(new Date().getMonth() + 1);
+
+  const { data: gymsData } = useGyms();
+  const gyms = gymsData?.gyms_info ?? [];
+  const selectedGymName = gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ['topRates', year, gymId, month],
@@ -95,22 +100,14 @@ export const TrylogPage = () => {
                   fontWeight: 800,
                 }}
               >
-                {gymId === 1
-                  ? 'Dボルダリングなんば'
-                  : gymId === 2
-                    ? 'クライミングバム大阪店'
-                    : 'CRUX大阪'}
+                {selectedGymName}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setGymId(1)}>
-                  Dボルダリングなんば
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setGymId(2)}>
-                  クライミングバム大阪店
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setGymId(3)}>
-                  CRUX大阪
-                </Dropdown.Item>
+                {gyms.map((gym) => (
+                  <Dropdown.Item key={gym.gym_id} onClick={() => setGymId(gym.gym_id)}>
+                    {gym.gym_name}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
 

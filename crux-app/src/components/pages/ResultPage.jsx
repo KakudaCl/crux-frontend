@@ -17,6 +17,7 @@ import { Bar } from 'react-chartjs-2';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
 import GreenHoldImage from '../../assets/images/green_hold.png';
+import { useGyms } from '../../hooks/useGyms';
 import { PageHeader } from '../parts/PageHeader';
 import { buildChartData } from '../utilities/ChartData';
 import { chartOptions } from '../utilities/ChartOptions';
@@ -33,6 +34,10 @@ ChartJS.register(
 export const ResultPage = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [gymId, setGymId] = useState(3);
+
+  const { data: gymsData } = useGyms();
+  const gyms = gymsData?.gyms_info ?? [];
+  const selectedGymName = gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['topRates', year, gymId],
@@ -96,22 +101,14 @@ export const ResultPage = () => {
                   fontWeight: 800,
                 }}
               >
-                {gymId === 1
-                  ? 'Dボルダリングなんば'
-                  : gymId === 2
-                    ? 'クライミングバム大阪店'
-                    : 'CRUX大阪'}
+                {selectedGymName}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setGymId(1)}>
-                  Dボルダリングなんば
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setGymId(2)}>
-                  クライミングバム大阪店
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setGymId(3)}>
-                  CRUX大阪
-                </Dropdown.Item>
+                {gyms.map((gym) => (
+                  <Dropdown.Item key={gym.gym_id} onClick={() => setGymId(gym.gym_id)}>
+                    {gym.gym_name}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
 
