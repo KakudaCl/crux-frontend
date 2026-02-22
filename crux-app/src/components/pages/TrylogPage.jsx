@@ -36,13 +36,34 @@ export const TrylogPage = () => {
 
   const { data: gymsData } = useGyms();
   const gyms = gymsData?.gyms_info ?? [];
-  const selectedGymName = gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
+  const selectedGymName =
+    gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ['topRates', year, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
         `/api/trylog/list?year=${year}&month=${month}&gym_id=${gymId}`
+      );
+      return response.data;
+    },
+  });
+
+  const { data: bestProbData } = useQuery({
+    queryKey: ['bestProb', year, gymId],
+    queryFn: async () => {
+      const response = await axios.get(
+        `/api/trylog/best/prob?year=${year}&gym_id=${gymId}`
+      );
+      return response.data;
+    },
+  });
+
+  const { data: bestCountData } = useQuery({
+    queryKey: ['bestCount', year, gymId],
+    queryFn: async () => {
+      const response = await axios.get(
+        `/api/trylog/best/count?year=${year}&gym_id=${gymId}`
       );
       return response.data;
     },
@@ -69,6 +90,39 @@ export const TrylogPage = () => {
   }
 
   const trylogInfo = data?.all_logs ?? [];
+
+  const bestProbSeasonBest = bestProbData?.season_best ?? null;
+  const bestProbPersonalBest = bestProbData?.personal_best ?? null;
+  const bestCountSeasonBest = bestCountData?.season_best ?? null;
+  const bestCountPersonalBest = bestCountData?.personal_best ?? null;
+
+  const bestCardStyle = {
+    background: 'white',
+    borderRadius: 12,
+    padding: '24px 16px',
+    textAlign: 'center',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+    height: '100%',
+  };
+
+  const bestCardTitleStyle = {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 16,
+  };
+
+  const bestCardMainStyle = (color) => ({
+    fontFamily: "'Stick No Bills', sans-serif",
+    fontWeight: 800,
+    fontSize: 48,
+    color: color ? `#${color}` : '#888',
+  });
+
+  const bestCardDateStyle = {
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginTop: 8,
+  };
 
   return (
     <div className="result-page">
@@ -104,7 +158,10 @@ export const TrylogPage = () => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {gyms.map((gym) => (
-                  <Dropdown.Item key={gym.gym_id} onClick={() => setGymId(gym.gym_id)}>
+                  <Dropdown.Item
+                    key={gym.gym_id}
+                    onClick={() => setGymId(gym.gym_id)}
+                  >
                     {gym.gym_name}
                   </Dropdown.Item>
                 ))}
@@ -243,6 +300,97 @@ export const TrylogPage = () => {
             </div>
           );
         })}
+
+        {/* ベスト記録カード */}
+        <div className="row mt-3 g-3">
+          {/* Prob Season Best */}
+          <div className="col-6">
+            <div style={bestCardStyle}>
+              <div style={bestCardTitleStyle}>Prob Season Best {year}</div>
+              {bestProbSeasonBest ? (
+                <>
+                  <div
+                    style={bestCardMainStyle(bestProbSeasonBest.grade_color)}
+                  >
+                    No.{bestProbSeasonBest.prob_no}&nbsp;&nbsp;
+                    {bestProbSeasonBest.grade}
+                  </div>
+                  <div style={bestCardDateStyle}>
+                    {bestProbSeasonBest.record_date}
+                  </div>
+                </>
+              ) : (
+                <div style={{ color: '#888' }}>記録なし</div>
+              )}
+            </div>
+          </div>
+
+          {/* Prob Personal Best */}
+          <div className="col-6">
+            <div style={bestCardStyle}>
+              <div style={bestCardTitleStyle}>Prob Personal Best</div>
+              {bestProbPersonalBest ? (
+                <>
+                  <div
+                    style={bestCardMainStyle(bestProbPersonalBest.grade_color)}
+                  >
+                    No.{bestProbPersonalBest.prob_no}&nbsp;&nbsp;
+                    {bestProbPersonalBest.grade}
+                  </div>
+                  <div style={bestCardDateStyle}>
+                    {bestProbPersonalBest.record_date}
+                  </div>
+                </>
+              ) : (
+                <div style={{ color: '#888' }}>記録なし</div>
+              )}
+            </div>
+          </div>
+
+          {/* Count Season Best */}
+          <div className="col-6">
+            <div style={bestCardStyle}>
+              <div style={bestCardTitleStyle}>Count Season Best {year}</div>
+              {bestCountSeasonBest ? (
+                <>
+                  <div
+                    style={bestCardMainStyle(bestCountSeasonBest.grade_color)}
+                  >
+                    {bestCountSeasonBest.grade}&nbsp;&nbsp;
+                    {'★'.repeat(bestCountSeasonBest.top_count)}
+                  </div>
+                  <div style={bestCardDateStyle}>
+                    {bestCountSeasonBest.record_date}
+                  </div>
+                </>
+              ) : (
+                <div style={{ color: '#888' }}>記録なし</div>
+              )}
+            </div>
+          </div>
+
+          {/* Count Personal Best */}
+          <div className="col-6">
+            <div style={bestCardStyle}>
+              <div style={bestCardTitleStyle}>Count Personal Best</div>
+              {bestCountPersonalBest ? (
+                <>
+                  <div
+                    style={bestCardMainStyle(bestCountPersonalBest.grade_color)}
+                  >
+                    {bestCountPersonalBest.grade}&nbsp;&nbsp;
+                    {'★'.repeat(bestCountPersonalBest.top_count)}
+                  </div>
+                  <div style={bestCardDateStyle}>
+                    {bestCountPersonalBest.record_date}
+                  </div>
+                </>
+              ) : (
+                <div style={{ color: '#888' }}>記録なし</div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
