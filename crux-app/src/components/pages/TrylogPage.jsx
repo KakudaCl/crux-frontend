@@ -304,7 +304,7 @@ export const TrylogPage = () => {
         })}
 
         {/* ベスト記録カード */}
-        <div className="row mt-3 g-3">
+        <div className="row g-3">
           {/* Prob Season Best */}
           <div className="col-6">
             <div style={bestCardStyle}>
