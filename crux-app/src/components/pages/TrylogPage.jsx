@@ -308,7 +308,7 @@ export const TrylogPage = () => {
           {/* Prob Season Best */}
           <div className="col-6">
             <div style={bestCardStyle}>
-              <div style={bestCardTitleStyle}>Prob Season Best {year}</div>
+              <div style={bestCardTitleStyle}>PROB SEASON BEST {year}</div>
               {bestProbSeasonBest ? (
                 <>
                   <div
@@ -330,7 +330,7 @@ export const TrylogPage = () => {
           {/* Prob Personal Best */}
           <div className="col-6">
             <div style={bestCardStyle}>
-              <div style={bestCardTitleStyle}>Prob Personal Best</div>
+              <div style={bestCardTitleStyle}>PROB PERSONAL BEST</div>
               {bestProbPersonalBest ? (
                 <>
                   <div
@@ -352,7 +352,7 @@ export const TrylogPage = () => {
           {/* Count Season Best */}
           <div className="col-6">
             <div style={bestCardStyle}>
-              <div style={bestCardTitleStyle}>Count Season Best {year}</div>
+              <div style={bestCardTitleStyle}>COUNT SEASON BEST {year}</div>
               {bestCountSeasonBest ? (
                 <>
                   <div
@@ -374,7 +374,7 @@ export const TrylogPage = () => {
           {/* Count Personal Best */}
           <div className="col-6">
             <div style={bestCardStyle}>
-              <div style={bestCardTitleStyle}>Count Personal Best</div>
+              <div style={bestCardTitleStyle}>COUNT PERSONAL BEST</div>
               {bestCountPersonalBest ? (
                 <>
                   <div
