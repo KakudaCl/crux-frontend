@@ -322,7 +322,16 @@ export const TrylogPage = () => {
                   </div>
                 </>
               ) : (
-                <div style={{ color: '#888' }}>記録なし</div>
+                <div
+                  style={{
+                    fontFamily: "'Stick No Bills', sans-serif",
+                    fontWeight: 800,
+                    fontSize: 26,
+                    color: '#888',
+                  }}
+                >
+                  NO DATA
+                </div>
               )}
             </div>
           </div>
@@ -344,7 +353,16 @@ export const TrylogPage = () => {
                   </div>
                 </>
               ) : (
-                <div style={{ color: '#888' }}>記録なし</div>
+                <div
+                  style={{
+                    fontFamily: "'Stick No Bills', sans-serif",
+                    fontWeight: 800,
+                    fontSize: 26,
+                    color: '#888',
+                  }}
+                >
+                  NO DATA
+                </div>
               )}
             </div>
           </div>
@@ -366,7 +384,16 @@ export const TrylogPage = () => {
                   </div>
                 </>
               ) : (
-                <div style={{ color: '#888' }}>記録なし</div>
+                <div
+                  style={{
+                    fontFamily: "'Stick No Bills', sans-serif",
+                    fontWeight: 800,
+                    fontSize: 26,
+                    color: '#888',
+                  }}
+                >
+                  NO DATA
+                </div>
               )}
             </div>
           </div>
@@ -388,7 +415,16 @@ export const TrylogPage = () => {
                   </div>
                 </>
               ) : (
-                <div style={{ color: '#888' }}>記録なし</div>
+                <div
+                  style={{
+                    fontFamily: "'Stick No Bills', sans-serif",
+                    fontWeight: 800,
+                    fontSize: 26,
+                    color: '#888',
+                  }}
+                >
+                  NO DATA
+                </div>
               )}
             </div>
           </div>
