@@ -107,7 +107,7 @@ export const TrylogPage = () => {
 
   const bestCardTitleStyle = {
     fontFamily: "'Stick No Bills', sans-serif",
-    fontWeight: 'bold',
+    fontWeight: 800,
     fontSize: 26,
     marginBottom: 16,
   };
@@ -121,7 +121,7 @@ export const TrylogPage = () => {
 
   const bestCardDateStyle = {
     fontFamily: "'Stick No Bills', sans-serif",
-    fontWeight: 'bold',
+    fontWeight: 800,
     fontSize: 26,
     marginTop: 8,
   };
