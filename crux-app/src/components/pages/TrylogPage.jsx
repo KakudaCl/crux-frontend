@@ -305,67 +305,72 @@ export const TrylogPage = () => {
 
         {/* ベスト記録カード */}
         <div className="row g-3">
-          {/* Prob Season Best */}
-          <div className="col-6">
-            <div style={bestCardStyle}>
-              <div style={bestCardTitleStyle}>PROB SEASON BEST {year}</div>
-              {bestProbSeasonBest ? (
-                <>
-                  <div
-                    style={bestCardMainStyle(bestProbSeasonBest.grade_color)}
-                  >
-                    No.{bestProbSeasonBest.prob_no}&nbsp;&nbsp;
-                    {bestProbSeasonBest.grade}
-                  </div>
-                  <div style={bestCardDateStyle}>
-                    {bestProbSeasonBest.record_date}
-                  </div>
-                </>
-              ) : (
-                <div
-                  style={{
-                    fontFamily: "'Stick No Bills', sans-serif",
-                    fontWeight: 800,
-                    fontSize: 26,
-                    color: '#888',
-                  }}
-                >
-                  NO DATA
+          {/* Prob Season Best / Prob Personal Best：両方nullの場合は非表示 */}
+          {(bestProbSeasonBest || bestProbPersonalBest) && (
+            <>
+              {/* Prob Season Best */}
+              <div className="col-6">
+                <div style={bestCardStyle}>
+                  <div style={bestCardTitleStyle}>PROB SEASON BEST {year}</div>
+                  {bestProbSeasonBest ? (
+                    <>
+                      <div
+                        style={bestCardMainStyle(bestProbSeasonBest.grade_color)}
+                      >
+                        No.{bestProbSeasonBest.prob_no}&nbsp;&nbsp;
+                        {bestProbSeasonBest.grade}
+                      </div>
+                      <div style={bestCardDateStyle}>
+                        {bestProbSeasonBest.record_date}
+                      </div>
+                    </>
+                  ) : (
+                    <div
+                      style={{
+                        fontFamily: "'Stick No Bills', sans-serif",
+                        fontWeight: 800,
+                        fontSize: 26,
+                        color: '#888',
+                      }}
+                    >
+                      NO DATA
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
 
-          {/* Prob Personal Best */}
-          <div className="col-6">
-            <div style={bestCardStyle}>
-              <div style={bestCardTitleStyle}>PROB PERSONAL BEST</div>
-              {bestProbPersonalBest ? (
-                <>
-                  <div
-                    style={bestCardMainStyle(bestProbPersonalBest.grade_color)}
-                  >
-                    No.{bestProbPersonalBest.prob_no}&nbsp;&nbsp;
-                    {bestProbPersonalBest.grade}
-                  </div>
-                  <div style={bestCardDateStyle}>
-                    {bestProbPersonalBest.record_date}
-                  </div>
-                </>
-              ) : (
-                <div
-                  style={{
-                    fontFamily: "'Stick No Bills', sans-serif",
-                    fontWeight: 800,
-                    fontSize: 26,
-                    color: '#888',
-                  }}
-                >
-                  NO DATA
+              {/* Prob Personal Best */}
+              <div className="col-6">
+                <div style={bestCardStyle}>
+                  <div style={bestCardTitleStyle}>PROB PERSONAL BEST</div>
+                  {bestProbPersonalBest ? (
+                    <>
+                      <div
+                        style={bestCardMainStyle(bestProbPersonalBest.grade_color)}
+                      >
+                        No.{bestProbPersonalBest.prob_no}&nbsp;&nbsp;
+                        {bestProbPersonalBest.grade}
+                      </div>
+                      <div style={bestCardDateStyle}>
+                        {bestProbPersonalBest.record_date}
+                      </div>
+                    </>
+                  ) : (
+                    <div
+                      style={{
+                        fontFamily: "'Stick No Bills', sans-serif",
+                        fontWeight: 800,
+                        fontSize: 26,
+                        color: '#888',
+                      }}
+                    >
+                      NO DATA
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            </>
+          )}
 
           {/* Count Season Best */}
           <div className="col-6">
