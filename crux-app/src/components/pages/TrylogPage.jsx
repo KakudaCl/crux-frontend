@@ -49,23 +49,47 @@ export const TrylogPage = () => {
     },
   });
 
-  const { data: bestProbData } = useQuery({
-    queryKey: ['bestProb', year, gymId],
+  // season_best: year・gym_id・month に依存
+  const { data: bestProbSeasonBestData } = useQuery({
+    queryKey: ['bestProbSeasonBest', year, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog/best/prob?year=${year}&gym_id=${gymId}`
+        `/api/trylog/best/prob?year=${year}&gym_id=${gymId}&month=${month}`
       );
-      return response.data;
+      return response.data?.season_best ?? null;
     },
   });
 
-  const { data: bestCountData } = useQuery({
-    queryKey: ['bestCount', year, gymId],
+  // personal_best: gym_id のみに依存（year・month は使用しない）
+  const { data: bestProbPersonalBestData } = useQuery({
+    queryKey: ['bestProbPersonalBest', gymId],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog/best/count?year=${year}&gym_id=${gymId}`
+        `/api/trylog/best/prob?year=${year}&gym_id=${gymId}&month=${month}`
       );
-      return response.data;
+      return response.data?.personal_best ?? null;
+    },
+  });
+
+  // season_best: year・gym_id・month に依存
+  const { data: bestCountSeasonBestData } = useQuery({
+    queryKey: ['bestCountSeasonBest', year, gymId, month],
+    queryFn: async () => {
+      const response = await axios.get(
+        `/api/trylog/best/count?year=${year}&gym_id=${gymId}&month=${month}`
+      );
+      return response.data?.season_best ?? null;
+    },
+  });
+
+  // personal_best: gym_id のみに依存（year・month は使用しない）
+  const { data: bestCountPersonalBestData } = useQuery({
+    queryKey: ['bestCountPersonalBest', gymId],
+    queryFn: async () => {
+      const response = await axios.get(
+        `/api/trylog/best/count?year=${year}&gym_id=${gymId}&month=${month}`
+      );
+      return response.data?.personal_best ?? null;
     },
   });
 
@@ -91,10 +115,10 @@ export const TrylogPage = () => {
 
   const trylogInfo = data?.all_logs ?? [];
 
-  const bestProbSeasonBest = bestProbData?.season_best ?? null;
-  const bestProbPersonalBest = bestProbData?.personal_best ?? null;
-  const bestCountSeasonBest = bestCountData?.season_best ?? null;
-  const bestCountPersonalBest = bestCountData?.personal_best ?? null;
+  const bestProbSeasonBest = bestProbSeasonBestData ?? null;
+  const bestProbPersonalBest = bestProbPersonalBestData ?? null;
+  const bestCountSeasonBest = bestCountSeasonBestData ?? null;
+  const bestCountPersonalBest = bestCountPersonalBestData ?? null;
 
   const bestCardStyle = {
     background: 'white',
