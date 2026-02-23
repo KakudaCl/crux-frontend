@@ -62,7 +62,7 @@ export const TrylogPage = () => {
 
   // personal_best: gym_id のみに依存（year・month は使用しない）
   const { data: bestProbPersonalBestData } = useQuery({
-    queryKey: ['bestProbPersonalBest', gymId],
+    queryKey: ['bestProbPersonalBest', year, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
         `/api/trylog/best/prob?year=${year}&gym_id=${gymId}&month=${month}`
@@ -84,7 +84,7 @@ export const TrylogPage = () => {
 
   // personal_best: gym_id のみに依存（year・month は使用しない）
   const { data: bestCountPersonalBestData } = useQuery({
-    queryKey: ['bestCountPersonalBest', gymId],
+    queryKey: ['bestCountPersonalBest', year, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
         `/api/trylog/best/count?year=${year}&gym_id=${gymId}&month=${month}`
@@ -339,7 +339,9 @@ export const TrylogPage = () => {
                   {bestProbSeasonBest ? (
                     <>
                       <div
-                        style={bestCardMainStyle(bestProbSeasonBest.grade_color)}
+                        style={bestCardMainStyle(
+                          bestProbSeasonBest.grade_color
+                        )}
                       >
                         No.{bestProbSeasonBest.prob_no}&nbsp;&nbsp;
                         {bestProbSeasonBest.grade}
@@ -370,7 +372,9 @@ export const TrylogPage = () => {
                   {bestProbPersonalBest ? (
                     <>
                       <div
-                        style={bestCardMainStyle(bestProbPersonalBest.grade_color)}
+                        style={bestCardMainStyle(
+                          bestProbPersonalBest.grade_color
+                        )}
                       >
                         No.{bestProbPersonalBest.prob_no}&nbsp;&nbsp;
                         {bestProbPersonalBest.grade}
