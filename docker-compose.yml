@@ -3,6 +3,9 @@ services:
     build:
       context: ./crux-app
       dockerfile: Dockerfile
+      args:
+        NODE_IMAGE: node:22-alpine
+        NGINX_IMAGE: nginx:alpine
     container_name: crux-frontend
     ports:
       - "3000:80"

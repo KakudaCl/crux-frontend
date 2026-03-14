@@ -1,5 +1,8 @@
 # ビルドステージ
-FROM public.ecr.aws/docker/library/node:22-alpine AS builder
+ARG NODE_IMAGE=public.ecr.aws/docker/library/node:22-alpine
+ARG NGINX_IMAGE=public.ecr.aws/docker/library/nginx:alpine
+
+FROM ${NODE_IMAGE} AS builder
 
 WORKDIR /app
 
@@ -12,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # 本番ステージ
-FROM public.ecr.aws/docker/library/nginx:alpine
+FROM ${NGINX_IMAGE}
 
 # ビルド成果物を nginx のドキュメントルートにコピー
 COPY --from=builder /app/dist /usr/share/nginx/html
