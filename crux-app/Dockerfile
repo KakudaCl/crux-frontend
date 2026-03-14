@@ -1,5 +1,5 @@
 # ビルドステージ
-FROM node:22-alpine AS builder
+FROM public.ecr.aws/docker/library/node:22-alpine AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # 本番ステージ
-FROM nginx:alpine
+FROM public.ecr.aws/docker/library/nginx:alpine
 
 # ビルド成果物を nginx のドキュメントルートにコピー
 COPY --from=builder /app/dist /usr/share/nginx/html
