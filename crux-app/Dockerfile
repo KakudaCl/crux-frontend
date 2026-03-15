@@ -20,9 +20,7 @@ FROM ${NGINX_IMAGE}
 # ビルド成果物を nginx のドキュメントルートにコピー
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# カスタム nginx 設定をコピー（SPA 用ルーティング対応）
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# nginx 公式テンプレート機能を利用（起動時に envsubst で環境変数を展開）
+COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]

@@ -9,9 +9,9 @@ server {
     gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
 
     # バックエンド API へのプロキシ（ローカルの Vite proxy と同じ挙動）
-    # バックエンドがホストで動いている場合は host.docker.internal で参照
+    # BACKEND_URL 環境変数で接続先を切り替え（ローカル: host.docker.internal:8000 / AWS: ALB DNS名）
     location /api/ {
-        proxy_pass http://host.docker.internal:8000;
+        proxy_pass http://${BACKEND_URL};
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
