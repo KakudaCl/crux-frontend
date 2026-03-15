@@ -5,6 +5,7 @@
 ### docker-compose を使う場合（推奨）
 
 リポジトリルートで以下を実行します。
+ECS
 
 ```bash
 docker compose up --build
