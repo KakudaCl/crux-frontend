@@ -97,12 +97,13 @@ export const RegisterTrylogPage = () => {
 
   const handleSubmit = () => {
     registerTrylog({
+      gym_id: gymId,
       try_date: tryDate,
       trylog_list: rows.map((row) => ({
         prob_no: row.prob_no ? Number(row.prob_no) : null,
-        grade_id: row.grade_id ? Number(row.grade_id) : null,
-        result_id: row.result_id ? Number(row.result_id) : null,
-        area_id: row.area_id ? Number(row.area_id) : null,
+        grade_id: Number(row.grade_id ?? grades[0]?.grade_id ?? null),
+        result_id: Number(row.result_id ?? results[0]?.result_id ?? null),
+        area_id: Number(row.area_id ?? areas[0]?.area_id ?? null),
         day_count: row.day_count ? Number(row.day_count) : null,
         remarks: row.remarks || null,
       })),
