@@ -13,6 +13,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
@@ -171,6 +172,24 @@ export const TrylogPage = () => {
             />
           </h1>
           <div className="result-page__controls">
+            <Link
+              to="/register/trylog"
+              style={{
+                display: 'inline-block',
+                padding: '8px 16px',
+                fontSize: 14,
+                fontFamily: "'Noto Sans JP', sans-serif",
+                fontWeight: 800,
+                color: 'white',
+                backgroundColor: '#4caf50',
+                borderRadius: 6,
+                textDecoration: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              ＋ トライログ登録
+            </Link>
+
             <Dropdown>
               <Dropdown.Toggle
                 variant="primary"
