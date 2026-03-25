@@ -120,7 +120,7 @@ export const RegisterTrylogPage = () => {
           <h1 className="result-page__title">
             <img
               src={YellowHoldImage}
-              style={{ width: '8%', marginRight: '10px' }}
+              style={{ width: '45px', marginRight: '10px' }}
               alt="トライログ"
             />
             トライログ登録
