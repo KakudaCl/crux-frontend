@@ -10,8 +10,14 @@ server {
 
     # バックエンド API へのプロキシ（ローカルの Vite proxy と同じ挙動）
     # BACKEND_URL 環境変数で接続先を切り替え（ローカル: host.docker.internal:8000 / AWS: ALB DNS名）
+    # resolver を指定することで nginx が起動時ではなくリクエストのたびに DNS 再解決を行う。
+    # AWS VPC の DNS リゾルバー (169.254.169.253) を使用し、TTL を 30 秒に設定。
+    # ALB の IP ローテーションに追従するために必要。
+    resolver 169.254.169.253 valid=30s ipv6=off;
+
     location /api/ {
-        proxy_pass http://${BACKEND_URL};
+        set $backend_url http://${BACKEND_URL};
+        proxy_pass $backend_url;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
