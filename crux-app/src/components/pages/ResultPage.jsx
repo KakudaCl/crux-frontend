@@ -18,6 +18,7 @@ import { Bar } from 'react-chartjs-2';
 import EscalationImage from '../../assets/images/escalation_icon.png';
 import GreenHoldImage from '../../assets/images/green_hold.png';
 import { useGyms } from '../../hooks/useGyms';
+import { useYears } from '../../hooks/useYears';
 import { PageHeader } from '../parts/PageHeader';
 import { buildChartData } from '../utilities/ChartData';
 import { chartOptions } from '../utilities/ChartOptions';
@@ -36,14 +37,17 @@ export const ResultPage = () => {
   const [gymId, setGymId] = useState(3);
 
   const { data: gymsData } = useGyms();
+  const { data: yearsData } = useYears();
   const gyms = gymsData?.gyms_info ?? [];
+  const years = Array.isArray(yearsData?.years) ? yearsData.years : [];
+  const selectedYear = years.includes(year) ? year : (years[0] ?? year);
   const selectedGymName = gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['topRates', year, gymId],
+    queryKey: ['topRates', selectedYear, gymId],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/top_rate/month?year=${year}&gym_id=${gymId}`
+        `/api/top_rate/month?year=${selectedYear}&gym_id=${gymId}`
       );
       return response.data;
     },
@@ -121,15 +125,14 @@ export const ResultPage = () => {
                   fontWeight: 800,
                 }}
               >
-                {year}
+                {selectedYear}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setYear(2025)}>
-                  2025
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setYear(2026)}>
-                  2026
-                </Dropdown.Item>
+                {years.map((yearItem) => (
+                  <Dropdown.Item key={yearItem} onClick={() => setYear(yearItem)}>
+                    {yearItem}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
           </div>
