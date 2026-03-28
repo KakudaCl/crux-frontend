@@ -18,6 +18,7 @@ import { Bar } from 'react-chartjs-2';
 import BlueHoldImage from '../../assets/images/blue_hold.png';
 import EscalationImage from '../../assets/images/escalation_icon.png';
 import { useGyms } from '../../hooks/useGyms';
+import { useYears } from '../../hooks/useYears';
 import { PageHeader } from '../parts/PageHeader';
 import { buildChartData } from '../utilities/ChartData';
 import { chartOptions } from '../utilities/ChartOptions';
@@ -37,15 +38,18 @@ export const ResultPageArea = () => {
   const [period, setPeriod] = useState(3);
 
   const { data: gymsData } = useGyms();
+  const { data: yearsData } = useYears();
   const gyms = gymsData?.gyms_info ?? [];
+  const years = Array.isArray(yearsData?.years) ? yearsData.years : [];
+  const selectedYear = years.includes(year) ? year : (years[0] ?? year);
   const selectedGymName =
     gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['topRatesByArea', year, gymId, period],
+    queryKey: ['topRatesByArea', selectedYear, gymId, period],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/top_rate/area?year=${year}&gym_id=${gymId}&period=${period}`
+        `/api/top_rate/area?year=${selectedYear}&gym_id=${gymId}&period=${period}`
       );
       return response.data;
     },
@@ -125,15 +129,14 @@ export const ResultPageArea = () => {
                   fontWeight: 800,
                 }}
               >
-                {year}
+                {selectedYear}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setYear(2025)}>
-                  2025
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setYear(2026)}>
-                  2026
-                </Dropdown.Item>
+                {years.map((yearItem) => (
+                  <Dropdown.Item key={yearItem} onClick={() => setYear(yearItem)}>
+                    {yearItem}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
 

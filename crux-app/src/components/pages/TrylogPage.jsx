@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import EscalationImage from '../../assets/images/escalation_icon.png';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
 import { useGyms } from '../../hooks/useGyms';
+import { useYears } from '../../hooks/useYears';
 import { PageHeader } from '../parts/PageHeader';
 import { getResultColor } from '../utilities/ResultColor';
 
@@ -36,15 +37,18 @@ export const TrylogPage = () => {
   const [month, setMonth] = useState(new Date().getMonth() + 1);
 
   const { data: gymsData } = useGyms();
+  const { data: yearsData } = useYears();
   const gyms = gymsData?.gyms_info ?? [];
+  const years = Array.isArray(yearsData?.years) ? yearsData.years : [];
+  const selectedYear = years.includes(year) ? year : (years[0] ?? year);
   const selectedGymName =
     gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error, isFetching } = useQuery({
-    queryKey: ['topRates', year, gymId, month],
+    queryKey: ['topRates', selectedYear, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog/list?year=${year}&month=${month}&gym_id=${gymId}`
+        `/api/trylog/list?year=${selectedYear}&month=${month}&gym_id=${gymId}`
       );
       return response.data;
     },
@@ -52,10 +56,10 @@ export const TrylogPage = () => {
 
   // season_best: year・gym_id・month に依存
   const { data: bestProbSeasonBestData } = useQuery({
-    queryKey: ['bestProbSeasonBest', year, gymId, month],
+    queryKey: ['bestProbSeasonBest', selectedYear, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog/best/prob?year=${year}&gym_id=${gymId}&month=${month}`
+        `/api/trylog/best/prob?year=${selectedYear}&gym_id=${gymId}&month=${month}`
       );
       return response.data?.season_best ?? null;
     },
@@ -63,10 +67,10 @@ export const TrylogPage = () => {
 
   // personal_best: gym_id のみに依存（year・month は使用しない）
   const { data: bestProbPersonalBestData } = useQuery({
-    queryKey: ['bestProbPersonalBest', year, gymId, month],
+    queryKey: ['bestProbPersonalBest', selectedYear, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog/best/prob?year=${year}&gym_id=${gymId}&month=${month}`
+        `/api/trylog/best/prob?year=${selectedYear}&gym_id=${gymId}&month=${month}`
       );
       return response.data?.personal_best ?? null;
     },
@@ -74,10 +78,10 @@ export const TrylogPage = () => {
 
   // season_best: year・gym_id・month に依存
   const { data: bestCountSeasonBestData } = useQuery({
-    queryKey: ['bestCountSeasonBest', year, gymId, month],
+    queryKey: ['bestCountSeasonBest', selectedYear, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog/best/count?year=${year}&gym_id=${gymId}&month=${month}`
+        `/api/trylog/best/count?year=${selectedYear}&gym_id=${gymId}&month=${month}`
       );
       return response.data?.season_best ?? null;
     },
@@ -85,10 +89,10 @@ export const TrylogPage = () => {
 
   // personal_best: gym_id のみに依存（year・month は使用しない）
   const { data: bestCountPersonalBestData } = useQuery({
-    queryKey: ['bestCountPersonalBest', year, gymId, month],
+    queryKey: ['bestCountPersonalBest', selectedYear, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
-        `/api/trylog/best/count?year=${year}&gym_id=${gymId}&month=${month}`
+        `/api/trylog/best/count?year=${selectedYear}&gym_id=${gymId}&month=${month}`
       );
       return response.data?.personal_best ?? null;
     },
@@ -222,15 +226,17 @@ export const TrylogPage = () => {
                   fontWeight: 800,
                 }}
               >
-                {year}
+                {selectedYear}
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setYear(2025)}>
-                  2025
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setYear(2026)}>
-                  2026
-                </Dropdown.Item>
+                {years.map((yearItem) => (
+                  <Dropdown.Item
+                    key={yearItem}
+                    onClick={() => setYear(yearItem)}
+                  >
+                    {yearItem}
+                  </Dropdown.Item>
+                ))}
               </Dropdown.Menu>
             </Dropdown>
 
@@ -354,7 +360,9 @@ export const TrylogPage = () => {
               {/* Prob Season Best */}
               <div className="col-6">
                 <div style={bestCardStyle}>
-                  <div style={bestCardTitleStyle}>PROB SEASON BEST {year}</div>
+                  <div style={bestCardTitleStyle}>
+                    PROB SEASON BEST {selectedYear}
+                  </div>
                   {bestProbSeasonBest ? (
                     <>
                       <div
@@ -422,7 +430,9 @@ export const TrylogPage = () => {
           {/* Count Season Best */}
           <div className="col-6">
             <div style={bestCardStyle}>
-              <div style={bestCardTitleStyle}>COUNT SEASON BEST {year}</div>
+              <div style={bestCardTitleStyle}>
+                COUNT SEASON BEST {selectedYear}
+              </div>
               {bestCountSeasonBest ? (
                 <>
                   <div
