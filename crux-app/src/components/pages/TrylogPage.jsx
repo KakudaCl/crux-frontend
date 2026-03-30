@@ -32,9 +32,15 @@ ChartJS.register(
 );
 
 export const TrylogPage = () => {
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [gymId, setGymId] = useState(3);
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [year, setYear] = useState(
+    Number(localStorage.getItem('trylogPageYear')) || new Date().getFullYear()
+  );
+  const [gymId, setGymId] = useState(
+    Number(localStorage.getItem('trylogPageGymId')) || 1
+  );
+  const [month, setMonth] = useState(
+    Number(localStorage.getItem('trylogPageMonth')) || new Date().getMonth() + 1
+  );
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
@@ -50,6 +56,9 @@ export const TrylogPage = () => {
       const response = await axios.get(
         `/api/trylog/list?year=${selectedYear}&month=${month}&gym_id=${gymId}`
       );
+      localStorage.setItem('trylogPageYear', selectedYear);
+      localStorage.setItem('trylogPageGymId', gymId);
+      localStorage.setItem('trylogPageMonth', month);
       return response.data;
     },
   });
