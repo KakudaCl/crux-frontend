@@ -33,15 +33,20 @@ ChartJS.register(
 );
 
 export const ResultPage = () => {
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [gymId, setGymId] = useState(3);
+  const [year, setYear] = useState(
+    Number(localStorage.getItem('resultPageYear')) || new Date().getFullYear()
+  );
+  const [gymId, setGymId] = useState(
+    Number(localStorage.getItem('resultPageGymId')) || 1
+  );
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
   const gyms = gymsData?.gyms_info ?? [];
   const years = Array.isArray(yearsData?.years) ? yearsData.years : [];
   const selectedYear = years.includes(year) ? year : (years[0] ?? year);
-  const selectedGymName = gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
+  const selectedGymName =
+    gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['topRates', selectedYear, gymId],
@@ -49,6 +54,8 @@ export const ResultPage = () => {
       const response = await axios.get(
         `/api/top_rate/month?year=${selectedYear}&gym_id=${gymId}`
       );
+      localStorage.setItem('resultPageYear', selectedYear);
+      localStorage.setItem('resultPageGymId', gymId);
       return response.data;
     },
   });
@@ -109,7 +116,10 @@ export const ResultPage = () => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {gyms.map((gym) => (
-                  <Dropdown.Item key={gym.gym_id} onClick={() => setGymId(gym.gym_id)}>
+                  <Dropdown.Item
+                    key={gym.gym_id}
+                    onClick={() => setGymId(gym.gym_id)}
+                  >
                     {gym.gym_name}
                   </Dropdown.Item>
                 ))}
@@ -129,7 +139,10 @@ export const ResultPage = () => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((yearItem) => (
-                  <Dropdown.Item key={yearItem} onClick={() => setYear(yearItem)}>
+                  <Dropdown.Item
+                    key={yearItem}
+                    onClick={() => setYear(yearItem)}
+                  >
                     {yearItem}
                   </Dropdown.Item>
                 ))}
