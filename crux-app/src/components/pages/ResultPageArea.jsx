@@ -33,9 +33,16 @@ ChartJS.register(
 );
 
 export const ResultPageArea = () => {
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [gymId, setGymId] = useState(3);
-  const [period, setPeriod] = useState(3);
+  const [year, setYear] = useState(
+    Number(localStorage.getItem('resultPageAreaYear')) ||
+      new Date().getFullYear()
+  );
+  const [gymId, setGymId] = useState(
+    Number(localStorage.getItem('resultPageAreaGymId')) || 1
+  );
+  const [period, setPeriod] = useState(
+    Number(localStorage.getItem('resultPageAreaPeriod')) || 3
+  );
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
@@ -51,6 +58,9 @@ export const ResultPageArea = () => {
       const response = await axios.get(
         `/api/top_rate/area?year=${selectedYear}&gym_id=${gymId}&period=${period}`
       );
+      localStorage.setItem('resultPageAreaYear', selectedYear);
+      localStorage.setItem('resultPageAreaGymId', gymId);
+      localStorage.setItem('resultPageAreaPeriod', period);
       return response.data;
     },
   });
@@ -133,7 +143,10 @@ export const ResultPageArea = () => {
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {years.map((yearItem) => (
-                  <Dropdown.Item key={yearItem} onClick={() => setYear(yearItem)}>
+                  <Dropdown.Item
+                    key={yearItem}
+                    onClick={() => setYear(yearItem)}
+                  >
                     {yearItem}
                   </Dropdown.Item>
                 ))}

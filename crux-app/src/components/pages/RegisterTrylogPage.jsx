@@ -27,7 +27,9 @@ const createEmptyRow = () => ({
 });
 
 export const RegisterTrylogPage = () => {
-  const [gymId, setGymId] = useState(1);
+  const [gymId, setGymId] = useState(
+    Number(localStorage.getItem('registerTrylogPageGymId')) || 1
+  );
   const [tryDate, setTryDate] = useState(today());
   const [rows, setRows] = useState([createEmptyRow()]);
 
@@ -38,6 +40,7 @@ export const RegisterTrylogPage = () => {
     queryKey: ['grades', gymId],
     queryFn: async () => {
       const res = await axios.get(`/api/grade/list?gym_id=${gymId}`);
+      localStorage.setItem('registerTrylogPageGymId', gymId);
       return res.data?.grades_info ?? [];
     },
     enabled: !!gymId,
