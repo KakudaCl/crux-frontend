@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
@@ -269,6 +269,23 @@ export const TrylogPage = () => {
               </Dropdown.Menu>
             </Dropdown>
           </div>
+        </div>
+        <div
+          className="result-page__header-section-checkbox"
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            fontFamily: "'Noto Sans JP', sans-serif",
+            fontWeight: 800,
+          }}
+        >
+          <Form>
+            <Form.Check
+              type="checkbox"
+              id="sort-checkbox"
+              label="完登順で表示"
+            />
+          </Form>
         </div>
 
         {trylogInfo.map((trylogData) => {
