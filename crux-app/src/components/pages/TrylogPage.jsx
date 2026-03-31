@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Dropdown } from 'react-bootstrap';
+import { Dropdown, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
@@ -41,6 +41,7 @@ export const TrylogPage = () => {
   const [month, setMonth] = useState(
     Number(localStorage.getItem('trylogPageMonth')) || new Date().getMonth() + 1
   );
+  const [isTimeSort, setIsTimeSort] = useState(false);
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
@@ -51,10 +52,11 @@ export const TrylogPage = () => {
     gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error, isFetching } = useQuery({
-    queryKey: ['topRates', selectedYear, gymId, month],
+    queryKey: ['topRates', selectedYear, gymId, month, isTimeSort],
     queryFn: async () => {
+      let sort_key = isTimeSort ? 'time' : 'prob_no';
       const response = await axios.get(
-        `/api/trylog/list?year=${selectedYear}&month=${month}&gym_id=${gymId}`
+        `/api/trylog/list?year=${selectedYear}&month=${month}&gym_id=${gymId}&sort=${sort_key}`
       );
       localStorage.setItem('trylogPageYear', selectedYear);
       localStorage.setItem('trylogPageGymId', gymId);
@@ -269,6 +271,25 @@ export const TrylogPage = () => {
               </Dropdown.Menu>
             </Dropdown>
           </div>
+        </div>
+        <div
+          className="result-page__header-section-checkbox"
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            fontFamily: "'Noto Sans JP', sans-serif",
+            fontWeight: 800,
+          }}
+        >
+          <Form>
+            <Form.Check
+              type="checkbox"
+              id="sort-checkbox"
+              label="完登順で表示"
+              checked={isTimeSort}
+              onChange={() => setIsTimeSort(!isTimeSort)}
+            />
+          </Form>
         </div>
 
         {trylogInfo.map((trylogData) => {
