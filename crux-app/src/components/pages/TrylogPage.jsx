@@ -41,6 +41,7 @@ export const TrylogPage = () => {
   const [month, setMonth] = useState(
     Number(localStorage.getItem('trylogPageMonth')) || new Date().getMonth() + 1
   );
+  const [isTimeSort, setIsTimeSort] = useState(false);
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
@@ -51,10 +52,11 @@ export const TrylogPage = () => {
     gyms.find((g) => g.gym_id === gymId)?.gym_name ?? '読み込み中...';
 
   const { data, isLoading, error, isFetching } = useQuery({
-    queryKey: ['topRates', selectedYear, gymId, month],
+    queryKey: ['topRates', selectedYear, gymId, month, isTimeSort],
     queryFn: async () => {
+      let sort_key = isTimeSort ? 'time' : 'prob_no';
       const response = await axios.get(
-        `/api/trylog/list?year=${selectedYear}&month=${month}&gym_id=${gymId}`
+        `/api/trylog/list?year=${selectedYear}&month=${month}&gym_id=${gymId}&sort=${sort_key}`
       );
       localStorage.setItem('trylogPageYear', selectedYear);
       localStorage.setItem('trylogPageGymId', gymId);
@@ -284,6 +286,8 @@ export const TrylogPage = () => {
               type="checkbox"
               id="sort-checkbox"
               label="完登順で表示"
+              checked={isTimeSort}
+              onChange={() => setIsTimeSort(!isTimeSort)}
             />
           </Form>
         </div>
