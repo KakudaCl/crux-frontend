@@ -285,7 +285,7 @@ export const TrylogPage = () => {
             <Form.Check
               type="checkbox"
               id="sort-checkbox"
-              label="完登順で表示"
+              label="トライ順で表示"
               checked={isTimeSort}
               onChange={() => setIsTimeSort(!isTimeSort)}
             />
