@@ -42,6 +42,7 @@ export const TrylogPage = () => {
     Number(localStorage.getItem('trylogPageMonth')) || new Date().getMonth() + 1
   );
   const [isTimeSort, setIsTimeSort] = useState(false);
+  const [isDeleteResult, setIsDeleteResult] = useState(false);
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
@@ -281,13 +282,20 @@ export const TrylogPage = () => {
             fontWeight: 800,
           }}
         >
-          <Form>
+          <Form className="d-flex flex-row align-items-center gap-3">
             <Form.Check
               type="checkbox"
               id="sort-checkbox"
               label="トライ順で表示"
               checked={isTimeSort}
               onChange={() => setIsTimeSort(!isTimeSort)}
+            />
+            <Form.Check
+              type="checkbox"
+              id="delete-checkbox"
+              label="結果を削除"
+              checked={isDeleteResult}
+              onChange={() => setIsDeleteResult(!isDeleteResult)}
             />
           </Form>
         </div>
