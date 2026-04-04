@@ -103,7 +103,11 @@ export const RegisterTrylogPage = () => {
       gym_id: gymId,
       try_date: tryDate,
       trylog_list: rows.map((row) => ({
-        prob_no: row.prob_no ? Number(row.prob_no) : null,
+        // -が選択された場合は、課題番号を空（null）で送る
+        prob_no:
+          row.prob_no === '' || row.prob_no === '-' || row.prob_no == null
+            ? null
+            : Number(row.prob_no),
         grade_id: Number(row.grade_id ?? grades[0]?.grade_id ?? null),
         result_id: Number(row.result_id ?? results[0]?.result_id ?? null),
         area_id: Number(row.area_id ?? areas[0]?.area_id ?? null),
@@ -240,12 +244,13 @@ export const RegisterTrylogPage = () => {
                     {/* No */}
                     <td style={tdStyle}>
                       <select
-                        value={row.prob_no}
+                        value={row.prob_no ?? ''}
                         onChange={(e) =>
                           handleRowChange(index, 'prob_no', e.target.value)
                         }
                         style={cellSelectStyle}
                       >
+                        <option value="">-</option>
                         {Array.from({ length: 50 }, (_, i) => i + 1).map(
                           (n) => (
                             <option key={n} value={n}>
