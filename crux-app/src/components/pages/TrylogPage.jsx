@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
@@ -12,7 +12,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { Dropdown, Form } from 'react-bootstrap';
+import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
@@ -43,6 +43,37 @@ export const TrylogPage = () => {
   );
   const [isTimeSort, setIsTimeSort] = useState(false);
   const [isDeleteResult, setIsDeleteResult] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: async (tryId) => {
+      await axios.post(`/api/trylog/delete?try_id=${tryId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['topRates'] });
+      setShowDeleteModal(false);
+      setPendingDeleteId(null);
+    },
+  });
+
+  const handleDeleteClick = (tryId) => {
+    setPendingDeleteId(tryId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (pendingDeleteId !== null) {
+      deleteMutation.mutate(pendingDeleteId);
+    }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setPendingDeleteId(null);
+  };
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
@@ -169,6 +200,33 @@ export const TrylogPage = () => {
 
   return (
     <div className="result-page">
+      <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title
+            style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+          >
+            削除の確認
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 500 }}
+        >
+          このトライログを削除してもよろしいですか？
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleDeleteCancel}>
+            キャンセル
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDeleteConfirm}
+            disabled={deleteMutation.isPending}
+          >
+            {deleteMutation.isPending ? '削除中...' : '削除する'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {/* ヘッダー */}
       <PageHeader />
 
@@ -321,9 +379,12 @@ export const TrylogPage = () => {
                     <th scope="col" style={{ width: '10%' }}>
                       Day
                     </th>
-                    <th scope="col" style={{ width: '40%' }}>
+                    <th scope="col" style={{ width: isDeleteResult ? '30%' : '40%' }}>
                       Remarks
                     </th>
+                    {isDeleteResult && (
+                      <th scope="col" style={{ width: '10%' }} />
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -382,6 +443,25 @@ export const TrylogPage = () => {
                       >
                         {log.remarks}
                       </td>
+                      {isDeleteResult && (
+                        <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                          <button
+                            onClick={() => handleDeleteClick(log.try_id)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: 20,
+                              color: '#e53935',
+                              lineHeight: 1,
+                              padding: '4px 8px',
+                            }}
+                            aria-label="削除"
+                          >
+                            ✕
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
