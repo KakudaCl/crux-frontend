@@ -17,7 +17,9 @@ const today = () => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
+let rowIdCounter = 0;
 const createEmptyRow = () => ({
+  _id: ++rowIdCounter,
   prob_no: 1,
   grade_id: null,
   result_id: null,
@@ -28,10 +30,10 @@ const createEmptyRow = () => ({
 
 export const RegisterTrylogPage = () => {
   const [gymId, setGymId] = useState(
-    Number(localStorage.getItem('registerTrylogPageGymId')) || 1
+    () => Number(localStorage.getItem('registerTrylogPageGymId')) || 1
   );
-  const [tryDate, setTryDate] = useState(today());
-  const [rows, setRows] = useState([createEmptyRow()]);
+  const [tryDate, setTryDate] = useState(today);
+  const [rows, setRows] = useState(() => [createEmptyRow()]);
 
   const { data: gymsData } = useGyms();
   const gyms = gymsData?.gyms_info ?? [];
@@ -240,7 +242,7 @@ export const RegisterTrylogPage = () => {
               </thead>
               <tbody>
                 {rows.map((row, index) => (
-                  <tr key={index}>
+                  <tr key={row._id}>
                     {/* No */}
                     <td style={tdStyle}>
                       <select

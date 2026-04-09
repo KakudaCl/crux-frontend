@@ -34,14 +34,13 @@ ChartJS.register(
 
 export const ResultPageArea = () => {
   const [year, setYear] = useState(
-    Number(localStorage.getItem('resultPageAreaYear')) ||
-      new Date().getFullYear()
+    () => Number(localStorage.getItem('resultPageAreaYear')) || new Date().getFullYear()
   );
   const [gymId, setGymId] = useState(
-    Number(localStorage.getItem('resultPageAreaGymId')) || 1
+    () => Number(localStorage.getItem('resultPageAreaGymId')) || 1
   );
   const [period, setPeriod] = useState(
-    Number(localStorage.getItem('resultPageAreaPeriod')) || 3
+    () => Number(localStorage.getItem('resultPageAreaPeriod')) || 3
   );
 
   const { data: gymsData } = useGyms();
@@ -187,7 +186,7 @@ export const ResultPageArea = () => {
               <div
                 className="result-page__chart-title"
                 style={{
-                  color: '#' + gradeData.grade_color || 'rgb(128, 128, 128)',
+                  color: gradeData.grade_color ? `#${gradeData.grade_color}` : 'rgb(128, 128, 128)',
                 }}
               >
                 {gradeData.grade}

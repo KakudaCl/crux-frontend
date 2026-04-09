@@ -34,10 +34,10 @@ ChartJS.register(
 
 export const ResultPage = () => {
   const [year, setYear] = useState(
-    Number(localStorage.getItem('resultPageYear')) || new Date().getFullYear()
+    () => Number(localStorage.getItem('resultPageYear')) || new Date().getFullYear()
   );
   const [gymId, setGymId] = useState(
-    Number(localStorage.getItem('resultPageGymId')) || 1
+    () => Number(localStorage.getItem('resultPageGymId')) || 1
   );
 
   const { data: gymsData } = useGyms();
@@ -162,7 +162,7 @@ export const ResultPage = () => {
               <div
                 className="result-page__chart-title"
                 style={{
-                  color: '#' + gradeData.grade_color || 'rgb(128, 128, 128)',
+                  color: gradeData.grade_color ? `#${gradeData.grade_color}` : 'rgb(128, 128, 128)',
                 }}
               >
                 {gradeData.grade}
