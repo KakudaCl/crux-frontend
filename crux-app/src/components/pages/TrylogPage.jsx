@@ -31,15 +31,52 @@ ChartJS.register(
   Legend
 );
 
+const bestCardStyle = {
+  background: 'white',
+  borderRadius: 12,
+  padding: '24px 16px',
+  textAlign: 'center',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+  height: '100%',
+};
+
+const bestCardTitleStyle = {
+  fontFamily: "'Stick No Bills', sans-serif",
+  fontWeight: 800,
+  fontSize: 26,
+  marginBottom: 16,
+};
+
+const bestCardMainStyle = (color) => ({
+  fontFamily: "'Stick No Bills', sans-serif",
+  fontWeight: 800,
+  fontSize: 48,
+  color: color ? `#${color}` : '#888',
+});
+
+const bestCardDateStyle = {
+  fontFamily: "'Stick No Bills', sans-serif",
+  fontWeight: 800,
+  fontSize: 26,
+  marginTop: 8,
+};
+
+const noDataStyle = {
+  fontFamily: "'Stick No Bills', sans-serif",
+  fontWeight: 800,
+  fontSize: 26,
+  color: '#888',
+};
+
 export const TrylogPage = () => {
   const [year, setYear] = useState(
-    Number(localStorage.getItem('trylogPageYear')) || new Date().getFullYear()
+    () => Number(localStorage.getItem('trylogPageYear')) || new Date().getFullYear()
   );
   const [gymId, setGymId] = useState(
-    Number(localStorage.getItem('trylogPageGymId')) || 1
+    () => Number(localStorage.getItem('trylogPageGymId')) || 1
   );
   const [month, setMonth] = useState(
-    Number(localStorage.getItem('trylogPageMonth')) || new Date().getMonth() + 1
+    () => Number(localStorage.getItem('trylogPageMonth')) || new Date().getMonth() + 1
   );
   const [isTimeSort, setIsTimeSort] = useState(false);
   const [isDeleteResult, setIsDeleteResult] = useState(false);
@@ -86,7 +123,7 @@ export const TrylogPage = () => {
   const { data, isLoading, error, isFetching } = useQuery({
     queryKey: ['topRates', selectedYear, gymId, month, isTimeSort],
     queryFn: async () => {
-      let sort_key = isTimeSort ? 'time' : 'prob_no';
+      const sort_key = isTimeSort ? 'time' : 'prob_no';
       const response = await axios.get(
         `/api/trylog/list?year=${selectedYear}&month=${month}&gym_id=${gymId}&sort=${sort_key}`
       );
@@ -97,47 +134,25 @@ export const TrylogPage = () => {
     },
   });
 
-  // season_best: year・gym_id・month に依存
-  const { data: bestProbSeasonBestData } = useQuery({
-    queryKey: ['bestProbSeasonBest', selectedYear, gymId, month],
+  // prob best（season_best と personal_best を1回のリクエストで取得）
+  const { data: bestProbData } = useQuery({
+    queryKey: ['bestProb', selectedYear, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
         `/api/trylog/best/prob?year=${selectedYear}&gym_id=${gymId}&month=${month}`
       );
-      return response.data?.season_best ?? null;
+      return response.data;
     },
   });
 
-  // personal_best: gym_id のみに依存（year・month は使用しない）
-  const { data: bestProbPersonalBestData } = useQuery({
-    queryKey: ['bestProbPersonalBest', selectedYear, gymId, month],
-    queryFn: async () => {
-      const response = await axios.get(
-        `/api/trylog/best/prob?year=${selectedYear}&gym_id=${gymId}&month=${month}`
-      );
-      return response.data?.personal_best ?? null;
-    },
-  });
-
-  // season_best: year・gym_id・month に依存
-  const { data: bestCountSeasonBestData } = useQuery({
-    queryKey: ['bestCountSeasonBest', selectedYear, gymId, month],
+  // count best（season_best と personal_best を1回のリクエストで取得）
+  const { data: bestCountData } = useQuery({
+    queryKey: ['bestCount', selectedYear, gymId, month],
     queryFn: async () => {
       const response = await axios.get(
         `/api/trylog/best/count?year=${selectedYear}&gym_id=${gymId}&month=${month}`
       );
-      return response.data?.season_best ?? null;
-    },
-  });
-
-  // personal_best: gym_id のみに依存（year・month は使用しない）
-  const { data: bestCountPersonalBestData } = useQuery({
-    queryKey: ['bestCountPersonalBest', selectedYear, gymId, month],
-    queryFn: async () => {
-      const response = await axios.get(
-        `/api/trylog/best/count?year=${selectedYear}&gym_id=${gymId}&month=${month}`
-      );
-      return response.data?.personal_best ?? null;
+      return response.data;
     },
   });
 
@@ -163,40 +178,10 @@ export const TrylogPage = () => {
 
   const trylogInfo = data?.all_logs ?? [];
 
-  const bestProbSeasonBest = bestProbSeasonBestData ?? null;
-  const bestProbPersonalBest = bestProbPersonalBestData ?? null;
-  const bestCountSeasonBest = bestCountSeasonBestData ?? null;
-  const bestCountPersonalBest = bestCountPersonalBestData ?? null;
-
-  const bestCardStyle = {
-    background: 'white',
-    borderRadius: 12,
-    padding: '24px 16px',
-    textAlign: 'center',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-    height: '100%',
-  };
-
-  const bestCardTitleStyle = {
-    fontFamily: "'Stick No Bills', sans-serif",
-    fontWeight: 800,
-    fontSize: 26,
-    marginBottom: 16,
-  };
-
-  const bestCardMainStyle = (color) => ({
-    fontFamily: "'Stick No Bills', sans-serif",
-    fontWeight: 800,
-    fontSize: 48,
-    color: color ? `#${color}` : '#888',
-  });
-
-  const bestCardDateStyle = {
-    fontFamily: "'Stick No Bills', sans-serif",
-    fontWeight: 800,
-    fontSize: 26,
-    marginTop: 8,
-  };
+  const bestProbSeasonBest = bestProbData?.season_best ?? null;
+  const bestProbPersonalBest = bestProbData?.personal_best ?? null;
+  const bestCountSeasonBest = bestCountData?.season_best ?? null;
+  const bestCountPersonalBest = bestCountData?.personal_best ?? null;
 
   return (
     <div className="result-page">
@@ -313,7 +298,7 @@ export const TrylogPage = () => {
             <Dropdown>
               <Dropdown.Toggle
                 variant="primary"
-                id="dropdown-year"
+                id="dropdown-month"
                 style={{
                   fontFamily: "'Noto Sans JP', sans-serif",
                   fontWeight: 800,
@@ -322,9 +307,9 @@ export const TrylogPage = () => {
                 {month}月
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
-                  <Dropdown.Item key={month} onClick={() => setMonth(month)}>
-                    {month}月
+                {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                  <Dropdown.Item key={m} onClick={() => setMonth(m)}>
+                    {m}月
                   </Dropdown.Item>
                 ))}
               </Dropdown.Menu>
@@ -346,14 +331,14 @@ export const TrylogPage = () => {
               id="sort-checkbox"
               label="トライ順で表示"
               checked={isTimeSort}
-              onChange={() => setIsTimeSort(!isTimeSort)}
+              onChange={() => setIsTimeSort((prev) => !prev)}
             />
             <Form.Check
               type="checkbox"
               id="delete-checkbox"
               label="結果を削除"
               checked={isDeleteResult}
-              onChange={() => setIsDeleteResult(!isDeleteResult)}
+              onChange={() => setIsDeleteResult((prev) => !prev)}
             />
           </Form>
         </div>
@@ -364,7 +349,7 @@ export const TrylogPage = () => {
               <div className="result-page__chart-title">
                 {trylogData.try_date}
               </div>
-              <table class="table">
+              <table className="table">
                 <thead>
                   <tr>
                     <th scope="col" style={{ width: '15%' }}>
@@ -473,7 +458,7 @@ export const TrylogPage = () => {
         {/* ベスト記録カード */}
         <div className="row g-3">
           {/* Prob Season Best / Prob Personal Best：両方nullの場合は非表示 */}
-          {(bestProbSeasonBest || bestProbPersonalBest) && (
+          {(bestProbSeasonBest || bestProbPersonalBest) ? (
             <>
               {/* Prob Season Best */}
               <div className="col-6">
@@ -496,16 +481,7 @@ export const TrylogPage = () => {
                       </div>
                     </>
                   ) : (
-                    <div
-                      style={{
-                        fontFamily: "'Stick No Bills', sans-serif",
-                        fontWeight: 800,
-                        fontSize: 26,
-                        color: '#888',
-                      }}
-                    >
-                      NO DATA
-                    </div>
+                    <div style={noDataStyle}>NO DATA</div>
                   )}
                 </div>
               </div>
@@ -529,21 +505,12 @@ export const TrylogPage = () => {
                       </div>
                     </>
                   ) : (
-                    <div
-                      style={{
-                        fontFamily: "'Stick No Bills', sans-serif",
-                        fontWeight: 800,
-                        fontSize: 26,
-                        color: '#888',
-                      }}
-                    >
-                      NO DATA
-                    </div>
+                    <div style={noDataStyle}>NO DATA</div>
                   )}
                 </div>
               </div>
             </>
-          )}
+          ) : null}
 
           {/* Count Season Best */}
           <div className="col-6">
@@ -564,16 +531,7 @@ export const TrylogPage = () => {
                   </div>
                 </>
               ) : (
-                <div
-                  style={{
-                    fontFamily: "'Stick No Bills', sans-serif",
-                    fontWeight: 800,
-                    fontSize: 26,
-                    color: '#888',
-                  }}
-                >
-                  NO DATA
-                </div>
+                <div style={noDataStyle}>NO DATA</div>
               )}
             </div>
           </div>
@@ -595,16 +553,7 @@ export const TrylogPage = () => {
                   </div>
                 </>
               ) : (
-                <div
-                  style={{
-                    fontFamily: "'Stick No Bills', sans-serif",
-                    fontWeight: 800,
-                    fontSize: 26,
-                    color: '#888',
-                  }}
-                >
-                  NO DATA
-                </div>
+                <div style={noDataStyle}>NO DATA</div>
               )}
             </div>
           </div>
