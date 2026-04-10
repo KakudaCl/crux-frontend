@@ -70,16 +70,20 @@ const noDataStyle = {
 
 export const TrylogPage = () => {
   const [year, setYear] = useState(
-    () => Number(localStorage.getItem('trylogPageYear')) || new Date().getFullYear()
+    () =>
+      Number(localStorage.getItem('trylogPageYear')) || new Date().getFullYear()
   );
   const [gymId, setGymId] = useState(
     () => Number(localStorage.getItem('trylogPageGymId')) || 1
   );
   const [month, setMonth] = useState(
-    () => Number(localStorage.getItem('trylogPageMonth')) || new Date().getMonth() + 1
+    () =>
+      Number(localStorage.getItem('trylogPageMonth')) ||
+      new Date().getMonth() + 1
   );
   const [isTimeSort, setIsTimeSort] = useState(false);
   const [isDeleteResult, setIsDeleteResult] = useState(false);
+  const [isEditResult, setIsEditResult] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
@@ -188,7 +192,10 @@ export const TrylogPage = () => {
       <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title
-            style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
           >
             削除の確認
           </Modal.Title>
@@ -335,10 +342,23 @@ export const TrylogPage = () => {
             />
             <Form.Check
               type="checkbox"
+              id="edit-checkbox"
+              label="結果を編集"
+              checked={isEditResult}
+              onChange={() => {
+                setIsEditResult((prev) => !prev);
+                setIsDeleteResult(false);
+              }}
+            />
+            <Form.Check
+              type="checkbox"
               id="delete-checkbox"
               label="結果を削除"
               checked={isDeleteResult}
-              onChange={() => setIsDeleteResult((prev) => !prev)}
+              onChange={() => {
+                setIsDeleteResult((prev) => !prev);
+                setIsEditResult(false);
+              }}
             />
           </Form>
         </div>
@@ -364,7 +384,10 @@ export const TrylogPage = () => {
                     <th scope="col" style={{ width: '10%' }}>
                       Day
                     </th>
-                    <th scope="col" style={{ width: isDeleteResult ? '30%' : '40%' }}>
+                    <th
+                      scope="col"
+                      style={{ width: isDeleteResult ? '30%' : '40%' }}
+                    >
                       Remarks
                     </th>
                     {isDeleteResult && (
@@ -429,7 +452,12 @@ export const TrylogPage = () => {
                         {log.remarks}
                       </td>
                       {isDeleteResult && (
-                        <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                        <td
+                          style={{
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                          }}
+                        >
                           <button
                             onClick={() => handleDeleteClick(log.try_id)}
                             style={{
@@ -458,7 +486,7 @@ export const TrylogPage = () => {
         {/* ベスト記録カード */}
         <div className="row g-3">
           {/* Prob Season Best / Prob Personal Best：両方nullの場合は非表示 */}
-          {(bestProbSeasonBest || bestProbPersonalBest) ? (
+          {bestProbSeasonBest || bestProbPersonalBest ? (
             <>
               {/* Prob Season Best */}
               <div className="col-6">
