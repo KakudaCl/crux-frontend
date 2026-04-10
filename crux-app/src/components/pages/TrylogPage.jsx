@@ -108,6 +108,7 @@ export const TrylogPage = () => {
       queryClient.invalidateQueries({ queryKey: ['topRates'] });
       setShowUpdateModal(false);
       setPendingUpdateId(null);
+      setEditingTryId(null);
       setUpdateRemarks('');
     },
   });
@@ -156,7 +157,6 @@ export const TrylogPage = () => {
   const handleUpdateCancel = () => {
     setShowUpdateModal(false);
     setPendingUpdateId(null);
-    setUpdateRemarks('');
   };
 
   const handleDeleteCancel = () => {
