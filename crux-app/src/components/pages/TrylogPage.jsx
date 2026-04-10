@@ -16,6 +16,9 @@ import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
+import FukidashiOkWhiteImage from '../../assets/images/fukidashi_ok_white.svg';
+import IroenpitsuBlackImage from '../../assets/images/iroenpitsu_black.svg';
+import MarkBatsuImage from '../../assets/images/mark_batsu.svg';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
 import { useGyms } from '../../hooks/useGyms';
 import { useYears } from '../../hooks/useYears';
@@ -89,10 +92,29 @@ export const TrylogPage = () => {
 
   const [editingTryId, setEditingTryId] = useState(null);
 
+  /* トライログ編集 */
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [pendingUpdateId, setPendingUpdateId] = useState(null);
+  const [updateRemarks, setUpdateRemarks] = useState('');
+
+  /* トライログ削除 */
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
   const queryClient = useQueryClient();
+
+  const updateMutation = useMutation({
+    mutationFn: async (data) => {
+      await axios.post('/api/trylog/edit', data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['topRates'] });
+      setShowUpdateModal(false);
+      setPendingUpdateId(null);
+      setEditingTryId(null);
+      setUpdateRemarks('');
+    },
+  });
 
   const deleteMutation = useMutation({
     mutationFn: async (tryId) => {
@@ -110,16 +132,34 @@ export const TrylogPage = () => {
     setShowDeleteModal(true);
   };
 
-  const handleEditClick = (tryId) => {
+  const handleEditClick = (tryId, remarks) => {
+    setUpdateRemarks(remarks);
     setEditingTryId(tryId);
   };
 
-  const handleUpdateClick = (tryId) => {};
+  const handleUpdateClick = (tryId) => {
+    setPendingUpdateId(tryId);
+    setShowUpdateModal(true);
+  };
+
+  const handleUpdateConfirm = () => {
+    if (pendingUpdateId !== null) {
+      updateMutation.mutate({
+        try_id: pendingUpdateId,
+        remarks: updateRemarks,
+      });
+    }
+  };
 
   const handleDeleteConfirm = () => {
     if (pendingDeleteId !== null) {
       deleteMutation.mutate(pendingDeleteId);
     }
+  };
+
+  const handleUpdateCancel = () => {
+    setShowUpdateModal(false);
+    setPendingUpdateId(null);
   };
 
   const handleDeleteCancel = () => {
@@ -200,6 +240,48 @@ export const TrylogPage = () => {
 
   return (
     <div className="result-page">
+      <Modal show={showUpdateModal} onHide={handleUpdateCancel} centered>
+        <Modal.Header closeButton>
+          <Modal.Title
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
+          >
+            更新の確認
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+        >
+          トライログを更新してもよろしいですか？
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={handleUpdateCancel}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
+          >
+            キャンセル
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleUpdateConfirm}
+            disabled={deleteMutation.isPending}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
+          >
+            {deleteMutation.isPending ? '更新中...' : '更新する'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* トライログ削除時モーダル */}
       <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title
@@ -212,18 +294,29 @@ export const TrylogPage = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body
-          style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 500 }}
+          style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
         >
           このトライログを削除してもよろしいですか？
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleDeleteCancel}>
+          <Button
+            variant="secondary"
+            onClick={handleDeleteCancel}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
+          >
             キャンセル
           </Button>
           <Button
             variant="danger"
             onClick={handleDeleteConfirm}
             disabled={deleteMutation.isPending}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
           >
             {deleteMutation.isPending ? '削除中...' : '削除する'}
           </Button>
@@ -467,7 +560,11 @@ export const TrylogPage = () => {
                       >
                         {editingTryId === log.try_id ? (
                           <>
-                            <Form.Control type="text" value={log.remarks} />
+                            <Form.Control
+                              type="text"
+                              value={updateRemarks}
+                              onChange={(e) => setUpdateRemarks(e.target.value)}
+                            />
                           </>
                         ) : (
                           log.remarks
@@ -494,7 +591,7 @@ export const TrylogPage = () => {
                             }}
                             aria-label="削除"
                           >
-                            ✕
+                            <img src={MarkBatsuImage} style={{ width: '20px', height: '20px' }}></img>
                           </button>
                         </td>
                       )}
@@ -520,11 +617,16 @@ export const TrylogPage = () => {
                               }}
                               aria-label="更新"
                             >
-                              更
+                              <img
+                                src={FukidashiOkWhiteImage}
+                                style={{ width: '20px', height: '20px' }}
+                              ></img>
                             </button>
                           ) : (
                             <button
-                              onClick={() => handleEditClick(log.try_id)}
+                              onClick={() =>
+                                handleEditClick(log.try_id, log.remarks)
+                              }
                               style={{
                                 background: 'none',
                                 border: 'none',
@@ -536,7 +638,10 @@ export const TrylogPage = () => {
                               }}
                               aria-label="編集"
                             >
-                              編
+                              <img
+                                src={IroenpitsuBlackImage}
+                                style={{ width: '20px', height: '20px' }}
+                              ></img>
                             </button>
                           )}
                         </td>
