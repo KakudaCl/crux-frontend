@@ -81,9 +81,14 @@ export const TrylogPage = () => {
       Number(localStorage.getItem('trylogPageMonth')) ||
       new Date().getMonth() + 1
   );
+
+  /* チェックボックス */
   const [isTimeSort, setIsTimeSort] = useState(false);
-  const [isDeleteResult, setIsDeleteResult] = useState(false);
   const [isEditResult, setIsEditResult] = useState(false);
+  const [isDeleteResult, setIsDeleteResult] = useState(false);
+
+  const [editingTryId, setEditingTryId] = useState(null);
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
@@ -105,7 +110,11 @@ export const TrylogPage = () => {
     setShowDeleteModal(true);
   };
 
-  const handleEditClick = (tryId) => {};
+  const handleEditClick = (tryId) => {
+    setEditingTryId(tryId);
+  };
+
+  const handleUpdateClick = (tryId) => {};
 
   const handleDeleteConfirm = () => {
     if (pendingDeleteId !== null) {
@@ -489,21 +498,39 @@ export const TrylogPage = () => {
                             textAlign: 'center',
                           }}
                         >
-                          <button
-                            onClick={() => handleEditClick(log.try_id)}
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer',
-                              fontSize: 20,
-                              color: '#00ff00',
-                              lineHeight: 1,
-                              padding: '4px 8px',
-                            }}
-                            aria-label="編集"
-                          >
-                            編
-                          </button>
+                          {editingTryId === log.try_id ? (
+                            <button
+                              onClick={() => handleUpdateClick(log.try_id)}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: 20,
+                                color: '#00ff00',
+                                lineHeight: 1,
+                                padding: '4px 8px',
+                              }}
+                              aria-label="更新"
+                            >
+                              更
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleEditClick(log.try_id)}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                fontSize: 20,
+                                color: '#00ff00',
+                                lineHeight: 1,
+                                padding: '4px 8px',
+                              }}
+                              aria-label="編集"
+                            >
+                              編
+                            </button>
+                          )}
                         </td>
                       )}
                     </tr>
