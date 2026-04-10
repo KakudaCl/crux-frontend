@@ -89,6 +89,12 @@ export const TrylogPage = () => {
 
   const [editingTryId, setEditingTryId] = useState(null);
 
+  /* トライログ編集 */
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [pendingUpdateId, setPendingUpdateId] = useState(null);
+  const [updateRemarks, setUpdateRemarks] = useState('');
+
+  /* トライログ削除 */
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
 
@@ -114,12 +120,21 @@ export const TrylogPage = () => {
     setEditingTryId(tryId);
   };
 
-  const handleUpdateClick = (tryId) => {};
+  const handleUpdateClick = (tryId) => {
+    setPendingUpdateId(tryId);
+    setShowUpdateModal(true);
+  };
 
   const handleDeleteConfirm = () => {
     if (pendingDeleteId !== null) {
       deleteMutation.mutate(pendingDeleteId);
     }
+  };
+
+  const handleUpdateCancel = () => {
+    setShowUpdateModal(false);
+    setPendingUpdateId(null);
+    setUpdateRemarks('');
   };
 
   const handleDeleteCancel = () => {
@@ -200,6 +215,10 @@ export const TrylogPage = () => {
 
   return (
     <div className="result-page">
+      <Modal show={showUpdateModal} onHide={handleUpdateCancel} centered>
+        <Modal.Header closeButton>更新の確認</Modal.Header>
+        <Modal.Body>トライログを更新してもよろしいですか？</Modal.Body>
+      </Modal>
       <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title
@@ -467,7 +486,11 @@ export const TrylogPage = () => {
                       >
                         {editingTryId === log.try_id ? (
                           <>
-                            <Form.Control type="text" value={log.remarks} />
+                            <Form.Control
+                              type="text"
+                              value={log.remarks}
+                              onChange={(e) => setUpdateRemarks(e.target.value)}
+                            />
                           </>
                         ) : (
                           log.remarks
