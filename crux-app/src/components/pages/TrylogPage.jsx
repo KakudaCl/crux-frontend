@@ -359,6 +359,7 @@ export const TrylogPage = () => {
               onChange={() => {
                 setIsEditResult((prev) => !prev);
                 setIsDeleteResult(false);
+                setEditingTryId(null);
               }}
             />
             <Form.Check
@@ -369,6 +370,7 @@ export const TrylogPage = () => {
               onChange={() => {
                 setIsDeleteResult((prev) => !prev);
                 setIsEditResult(false);
+                setEditingTryId(null);
               }}
             />
           </Form>
@@ -463,7 +465,13 @@ export const TrylogPage = () => {
                           verticalAlign: 'middle',
                         }}
                       >
-                        {log.remarks}
+                        {editingTryId === log.try_id ? (
+                          <>
+                            <Form.Control type="text" value={log.remarks} />
+                          </>
+                        ) : (
+                          log.remarks
+                        )}
                       </td>
                       {isDeleteResult && (
                         <td
