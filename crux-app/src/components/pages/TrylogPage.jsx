@@ -105,6 +105,8 @@ export const TrylogPage = () => {
     setShowDeleteModal(true);
   };
 
+  const handleEditClick = (tryId) => {};
+
   const handleDeleteConfirm = () => {
     if (pendingDeleteId !== null) {
       deleteMutation.mutate(pendingDeleteId);
@@ -393,6 +395,9 @@ export const TrylogPage = () => {
                     {isDeleteResult && (
                       <th scope="col" style={{ width: '10%' }} />
                     )}
+                    {isEditResult && (
+                      <th scope="col" style={{ width: '10%' }} />
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -458,6 +463,7 @@ export const TrylogPage = () => {
                             textAlign: 'center',
                           }}
                         >
+                          {/* 削除ボタン */}
                           <button
                             onClick={() => handleDeleteClick(log.try_id)}
                             style={{
@@ -472,6 +478,31 @@ export const TrylogPage = () => {
                             aria-label="削除"
                           >
                             ✕
+                          </button>
+                        </td>
+                      )}
+                      {/* 編集ボタン */}
+                      {isEditResult && (
+                        <td
+                          style={{
+                            verticalAlign: 'middle',
+                            textAlign: 'center',
+                          }}
+                        >
+                          <button
+                            onClick={() => handleEditClick(log.try_id)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              fontSize: 20,
+                              color: '#00ff00',
+                              lineHeight: 1,
+                              padding: '4px 8px',
+                            }}
+                            aria-label="編集"
+                          >
+                            編
                           </button>
                         </td>
                       )}
