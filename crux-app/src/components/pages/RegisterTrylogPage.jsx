@@ -346,6 +346,15 @@ export const RegisterTrylogPage = () => {
                         <button
                           onClick={() => handleDeleteRow(index)}
                           aria-label="行を削除"
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            fontSize: 20,
+                            color: '#00ff00',
+                            lineHeight: 1,
+                            padding: '4px 8px',
+                          }}
                         >
                           <img
                             src={MarkBatsuImage}
