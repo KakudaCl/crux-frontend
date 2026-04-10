@@ -100,6 +100,18 @@ export const TrylogPage = () => {
 
   const queryClient = useQueryClient();
 
+  const updateMutation = useMutation({
+    mutationFn: async (data) => {
+      await axios.post('/api/trylog/edit', data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['topRates'] });
+      setShowUpdateModal(false);
+      setPendingUpdateId(null);
+      setUpdateRemarks('');
+    },
+  });
+
   const deleteMutation = useMutation({
     mutationFn: async (tryId) => {
       await axios.post(`/api/trylog/delete?try_id=${tryId}`);
@@ -116,13 +128,23 @@ export const TrylogPage = () => {
     setShowDeleteModal(true);
   };
 
-  const handleEditClick = (tryId) => {
+  const handleEditClick = (tryId, remarks) => {
+    setUpdateRemarks(remarks);
     setEditingTryId(tryId);
   };
 
   const handleUpdateClick = (tryId) => {
     setPendingUpdateId(tryId);
     setShowUpdateModal(true);
+  };
+
+  const handleUpdateConfirm = () => {
+    if (pendingUpdateId !== null) {
+      updateMutation.mutate({
+        try_id: pendingUpdateId,
+        remarks: updateRemarks,
+      });
+    }
   };
 
   const handleDeleteConfirm = () => {
@@ -218,7 +240,21 @@ export const TrylogPage = () => {
       <Modal show={showUpdateModal} onHide={handleUpdateCancel} centered>
         <Modal.Header closeButton>更新の確認</Modal.Header>
         <Modal.Body>トライログを更新してもよろしいですか？</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleUpdateCancel}>
+            キャンセル
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleUpdateConfirm}
+            disabled={deleteMutation.isPending}
+          >
+            {deleteMutation.isPending ? '更新中...' : '更新する'}
+          </Button>
+        </Modal.Footer>
       </Modal>
+
+      {/* トライログ削除時モーダル */}
       <Modal show={showDeleteModal} onHide={handleDeleteCancel} centered>
         <Modal.Header closeButton>
           <Modal.Title
@@ -488,7 +524,7 @@ export const TrylogPage = () => {
                           <>
                             <Form.Control
                               type="text"
-                              value={log.remarks}
+                              value={updateRemarks}
                               onChange={(e) => setUpdateRemarks(e.target.value)}
                             />
                           </>
@@ -547,7 +583,9 @@ export const TrylogPage = () => {
                             </button>
                           ) : (
                             <button
-                              onClick={() => handleEditClick(log.try_id)}
+                              onClick={() =>
+                                handleEditClick(log.try_id, log.remarks)
+                              }
                               style={{
                                 background: 'none',
                                 border: 'none',
