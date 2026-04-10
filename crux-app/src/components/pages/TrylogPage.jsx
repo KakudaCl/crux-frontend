@@ -238,16 +238,40 @@ export const TrylogPage = () => {
   return (
     <div className="result-page">
       <Modal show={showUpdateModal} onHide={handleUpdateCancel} centered>
-        <Modal.Header closeButton>更新の確認</Modal.Header>
-        <Modal.Body>トライログを更新してもよろしいですか？</Modal.Body>
+        <Modal.Header closeButton>
+          <Modal.Title
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
+          >
+            更新の確認
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body
+          style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
+        >
+          トライログを更新してもよろしいですか？
+        </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleUpdateCancel}>
+          <Button
+            variant="secondary"
+            onClick={handleUpdateCancel}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
+          >
             キャンセル
           </Button>
           <Button
             variant="primary"
             onClick={handleUpdateConfirm}
             disabled={deleteMutation.isPending}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
           >
             {deleteMutation.isPending ? '更新中...' : '更新する'}
           </Button>
@@ -267,18 +291,29 @@ export const TrylogPage = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body
-          style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 500 }}
+          style={{ fontFamily: "'Noto Sans JP', sans-serif", fontWeight: 800 }}
         >
           このトライログを削除してもよろしいですか？
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleDeleteCancel}>
+          <Button
+            variant="secondary"
+            onClick={handleDeleteCancel}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
+          >
             キャンセル
           </Button>
           <Button
             variant="danger"
             onClick={handleDeleteConfirm}
             disabled={deleteMutation.isPending}
+            style={{
+              fontFamily: "'Noto Sans JP', sans-serif",
+              fontWeight: 800,
+            }}
           >
             {deleteMutation.isPending ? '削除中...' : '削除する'}
           </Button>
