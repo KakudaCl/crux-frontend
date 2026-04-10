@@ -5,6 +5,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
+import MarkBatsuImage from '../../assets/images/mark_batsu.svg';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
 import { useGyms } from '../../hooks/useGyms';
 import { PageHeader } from '../parts/PageHeader';
@@ -344,10 +345,12 @@ export const RegisterTrylogPage = () => {
                       {index > 0 && (
                         <button
                           onClick={() => handleDeleteRow(index)}
-                          style={deleteButtonStyle}
                           aria-label="行を削除"
                         >
-                          ✕
+                          <img
+                            src={MarkBatsuImage}
+                            style={{ width: '20px', height: '20px' }}
+                          ></img>
                         </button>
                       )}
                     </td>
@@ -412,21 +415,6 @@ const tdStyle = {
   padding: '8px 6px',
   textAlign: 'center',
   borderBottom: '1px solid #f0f0f0',
-};
-
-const deleteButtonStyle = {
-  width: 28,
-  height: 28,
-  borderRadius: '50%',
-  background: '#333',
-  color: 'white',
-  border: 'none',
-  cursor: 'pointer',
-  fontSize: 12,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: 0,
 };
 
 const addRowButtonStyle = {

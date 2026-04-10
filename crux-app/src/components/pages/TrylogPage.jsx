@@ -16,6 +16,9 @@ import { Button, Dropdown, Form, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import EscalationImage from '../../assets/images/escalation_icon.png';
+import FukidashiOkWhiteImage from '../../assets/images/fukidashi_ok_white.svg';
+import IroenpitsuBlackImage from '../../assets/images/iroenpitsu_black.svg';
+import MarkBatsuImage from '../../assets/images/mark_batsu.svg';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
 import { useGyms } from '../../hooks/useGyms';
 import { useYears } from '../../hooks/useYears';
@@ -588,7 +591,7 @@ export const TrylogPage = () => {
                             }}
                             aria-label="削除"
                           >
-                            ✕
+                            <img src={MarkBatsuImage} style={{ width: '20px', height: '20px' }}></img>
                           </button>
                         </td>
                       )}
@@ -614,7 +617,10 @@ export const TrylogPage = () => {
                               }}
                               aria-label="更新"
                             >
-                              更
+                              <img
+                                src={FukidashiOkWhiteImage}
+                                style={{ width: '20px', height: '20px' }}
+                              ></img>
                             </button>
                           ) : (
                             <button
@@ -632,7 +638,10 @@ export const TrylogPage = () => {
                               }}
                               aria-label="編集"
                             >
-                              編
+                              <img
+                                src={IroenpitsuBlackImage}
+                                style={{ width: '20px', height: '20px' }}
+                              ></img>
                             </button>
                           )}
                         </td>
