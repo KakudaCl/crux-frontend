@@ -21,6 +21,7 @@ import IroenpitsuBlackImage from '../../assets/images/iroenpitsu_black.svg';
 import MarkBatsuImage from '../../assets/images/mark_batsu.svg';
 import YellowHoldImage from '../../assets/images/yellow_hold.png';
 import { useGyms } from '../../hooks/useGyms';
+import { useResults } from '../../hooks/useResults';
 import { useYears } from '../../hooks/useYears';
 import { PageHeader } from '../parts/PageHeader';
 import { getResultColor } from '../utilities/ResultColor';
@@ -169,6 +170,8 @@ export const TrylogPage = () => {
 
   const { data: gymsData } = useGyms();
   const { data: yearsData } = useYears();
+  const { data: resultsData } = useResults();
+  const results = resultsData?.results_info ?? [];
   const gyms = gymsData?.gyms_info ?? [];
   const years = Array.isArray(yearsData?.years) ? yearsData.years : [];
   const selectedYear = years.includes(year) ? year : (years[0] ?? year);
@@ -520,15 +523,38 @@ export const TrylogPage = () => {
                         {log.prob_no}
                       </td>
                       <td
-                        style={{
-                          fontFamily: "'Stick No Bills', sans-serif",
-                          fontWeight: 800,
-                          fontSize: 26,
-                          verticalAlign: 'middle',
-                          color: getResultColor(log.result),
-                        }}
+                        style={
+                          editingTryId !== log.try_id
+                            ? {
+                                fontFamily: "'Stick No Bills', sans-serif",
+                                fontWeight: 800,
+                                fontSize: 26,
+                                verticalAlign: 'middle',
+                                color: getResultColor(log.result),
+                              }
+                            : {}
+                        }
                       >
-                        {log.result}
+                        {editingTryId === log.try_id ? (
+                          <Form.Select
+                            aria-label="Default select example"
+                            defaultValue={
+                              results.find((r) => r.result_name === log.result)
+                                ?.result_id
+                            }
+                          >
+                            {results.map((result) => (
+                              <option
+                                key={result.result_id}
+                                value={result.result_id}
+                              >
+                                {result.result_name}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        ) : (
+                          log.result
+                        )}
                       </td>
                       <td
                         style={{
@@ -591,7 +617,10 @@ export const TrylogPage = () => {
                             }}
                             aria-label="削除"
                           >
-                            <img src={MarkBatsuImage} style={{ width: '20px', height: '20px' }}></img>
+                            <img
+                              src={MarkBatsuImage}
+                              style={{ width: '20px', height: '20px' }}
+                            ></img>
                           </button>
                         </td>
                       )}
