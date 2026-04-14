@@ -97,6 +97,7 @@ export const TrylogPage = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [pendingUpdateId, setPendingUpdateId] = useState(null);
   const [updateRemarks, setUpdateRemarks] = useState('');
+  const [updateResultId, setUpdateResultId] = useState(null);
 
   /* トライログ削除 */
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -147,6 +148,7 @@ export const TrylogPage = () => {
     if (pendingUpdateId !== null) {
       updateMutation.mutate({
         try_id: pendingUpdateId,
+        result_id: updateResultId,
         remarks: updateRemarks,
       });
     }
@@ -541,6 +543,9 @@ export const TrylogPage = () => {
                             defaultValue={
                               results.find((r) => r.result_name === log.result)
                                 ?.result_id
+                            }
+                            onChange={(e) =>
+                              setUpdateResultId(Number(e.target.value))
                             }
                           >
                             {results.map((result) => (
